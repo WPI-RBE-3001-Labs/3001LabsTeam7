@@ -13,11 +13,6 @@
 //character for receiving serial data
 char inchar;
 unsigned int lowADC;
-unsigned int highADC = 635;
-float potAng=90;
-int potAngInt;
-unsigned long mV = 0;
-unsigned long mVMax = 5000;
 volatile unsigned long systemTime = 0;
 volatile unsigned long timerCounter;
 volatile unsigned long intTime;
@@ -57,38 +52,59 @@ void matLabDataCollect(void)
 		  			//matlab will buffer all characters until \n\r
 		  			for(int i=0;i<=1249;i++)
 		  			{
-		  			lowADC = getADC(2);
-		  			// 396 is 90degrees - horizontal degrees and 240 is horizontal pot tick
-		  			potAngInt =  ((lowADC - 240) * 90)/ 395 ;
-		  			mV = lowADC * (mVMax/highADC) ;
-		  			printf(" ADC %d, ",lowADC);
-		  			printf("Angle %d, ", potAngInt);
-		  			printf("mV %d", mV);
-		  			_delay_ms(500);
-		  			printf("\n\r");
+//		  			lowADC = getADC(2);
+//		  			// 396 is 90degrees - horizontal degrees and 240 is horizontal pot tick
+//		  			potAngInt =  ((lowADC - 240) * 90)/ 395 ;
+//		  			mV = lowADC * (mVMax/highADC) ;
+//		  			printf(" ADC %d, ",lowADC);
+//		  			printf("Angle %d, ", potAngInt);
+//		  			printf("mV %d", mV);
+//		  			_delay_ms(500);
+//		  			printf("\n\r");
 		  			}
 		  		}
 		  	  }
 }
 
+void initialize(int toggle) {
+	initRBELib();
+	debugUSARTInit(115200);
+	initSPI();
+}
+
+
+void readADC(int channel){
+	unsigned int highRange = 635;
+	unsigned int lowRange = 240;
+	float potAng= 90.00;
+	int potAngInt;
+	unsigned long mV = 0;
+	unsigned long mVMax = 5000;
+
+	inchar = getCharDebug();
+
+	if (inchar == 'a')
+	{
+		for(int i=0;i<=1249;i++)
+		{
+		lowADC = getADC(channel);
+		// 396 is 90degrees - horizontal degrees and 240 is horizontal pot tick
+		potAngInt =  ((lowADC - lowRange) * potAng)/(highRange - lowRange) ;
+		mV = lowADC * (mVMax/highRange);
+		printf(" ADC %d, ",lowADC);
+		printf("Angle %d, ", potAngInt);
+		printf("mV %d", mV);
+		_delay_ms(500);
+		printf("\n\r");
+		}
+	}
+}
+
+
 int main(void)
 {
-	  //Enable printf() and setServo()
-	  initRBELib();
-	  debugUSARTInit(115200);
-	  initSPI();
-	  _delay_ms(3000);
-	  setDAC(1, 4095);
+initialize(0); //sets DAC mode
 
-
-	  //Set the baud rate of the UART
-
-	  // printf uses a fair amount of memory to be included but makes serial printing much easier
-	 // printf("PutCharDebug is complete \n\r");
-
-	  //initADC(2);
-
-	 // initTimer(0, 0, 0);
 
 
 	  while(1)
@@ -105,6 +121,4 @@ int main(void)
 		  }*/
 
 	  }
-
-
 }

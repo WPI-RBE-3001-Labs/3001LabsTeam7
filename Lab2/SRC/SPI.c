@@ -30,7 +30,6 @@ void initSPI(){
 
 	SPSR = (0<<SPI2X);  // do not enable 2x speed mode ****** not sure if necessary
 
-
 }
 
 /**

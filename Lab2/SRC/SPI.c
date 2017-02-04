@@ -4,55 +4,40 @@
  *  Created on: Jan 29, 2017
  *      Author: ttruong
  */
-#include "RBELib/RBELib.h"
 
-/*
- * @brief Initializes the SPI bus for communication with all of your
- * SPI devices.
- */
-void initSPI(){
 
-	SPI_MISO_DDR = 0; // MISO = input
-	SPI_MOSI_DDR, SPI_SCK_DDR = 1; // MOSI, SCK = outputs
-
-	SPI_MISO, SPI_MOSI, SPI_SCK = 0; //MOSI, MISO and SCK set to low
-
-	DDRB |= (1<<DDB4);
-
-	SPCR |= (0<<SPIE);  // do not enable interrupt
-	SPCR |= (1<<SPE);   // enables SPI
-	SPCR |= (0<<DORD);  // MSB transmitted first
-	SPCR |= (1<<MSTR);  // master mode enabled
-	SPCR |= (0<<CPOL);  // clock signal is positive
-	SPCR |= (0<<CPHA);  // sends on rising edge
-	SPCR |= (1<<SPR1);  // set clock to oscillation_frequency/64
-	SPCR |= (0<<SPR0);  // set clock to oscillation_frequency/64
-
-	SPSR = (0<<SPI2X);  // do not enable 2x speed mode ****** not sure if necessary
-
-}
+#include "RBELib.h"
+#include "avr/io.h"
+#include <avr/interrupt.h>
 
 /**
- * @brief Send and receive a byte out of the MOSI line.
+ * @brief Initializes the SPI bus for communication with all of your
+ * SPI devices.
  *
- * Please note that even if you do not want to receive any data back
- * from a SPI device, the SPI standard requires you still receive something
- * back even if it is junk data.
- *
- * @param data The byte to send down the SPI bus.
- * @return value The byte shifted in during transmit
+ * @todo Create the function that will allow you to initialize the SPI
+ * in a mode compatible with all devices.  Do not forget to deassert all
+ * of your SS lines!
  */
-unsigned char spiTransceive(BYTE data){
-	//Start Transmission
+void initSPI() {
+	PORTC = 0x00;
 
+	DDRD |= (OUTPUT<<DDD4);
+	PORTD |= (HIGH<<PD4);
+
+	/* Set MOSI and SCK output, all others input */
+	DDRB = (1<<DDB5)|(1<<DDB7)|(1<<DDB4);
+	/* Enable SPI, Master, set clock rate fck/16 */
+	SPCR = (1<<SPE)|(1<<MSTR);
+
+	DDRC = 0x80;
+}
+
+
+unsigned char spiTransceive(BYTE data) {
+	/* Start transmission */
 	SPDR = data;
-
-	// Wait for Transmission to Finish
-
-	while(!((SPSR) & (1<<SPIF)));
-
-	//Return Data Transmitted by the SPI
-
+	/* Wait for transmission complete */
+	while(!(SPSR & (1<<SPIF)));
+	/* Read the register to see what was sent back*/
 	return SPDR;
-
 }

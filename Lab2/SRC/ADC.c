@@ -5,7 +5,7 @@
  *      Author: ewillcox
  */
 
-#include "RBELib/RBELib.h"
+#include "RBELib.h"
 
 /*
  * 50khz - 200khz

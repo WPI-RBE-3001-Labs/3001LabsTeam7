@@ -13,7 +13,7 @@
  *      Author: ewillcox
  */
 
-#include "RBELib/RBELib.h"
+#include "RBELib.h"
 
 void setDAC(int DACn, int SPIval){
   //We need to send out 3 "packages" for configuring the DAC

@@ -5,7 +5,7 @@
  */
 
 
-#include "RBELib/RBELib.h"
+#include "RBELib.h"
 //For use of abs()
 #include <stdlib.h>
 
@@ -18,7 +18,7 @@ volatile unsigned long timerCounter;
 volatile unsigned long intTime;
 volatile double timerCountVal = 9; //9 for ms system time
 
-void triangle(int DAC1, int DAC2, int delayTime);
+void triangle(int DAC1, int DAC2);
 void initialize();
 
 /*
@@ -67,28 +67,30 @@ void initialize() {
 	initSPI();
 }
 
-void triangle(int DAC1, int DAC2, int delayTime){
+void triangle(int DAC1, int DAC2){
 	 for(int i = 0; i < 4096; i++){
 				  setDAC(DAC1, i);
 				  setDAC(DAC2, 4095 - i);
-				  _delay_ms(100);
 			  }
 			  for(int j = 4095; j >= 0; j--){
 				  setDAC(DAC1, j);
 				  setDAC(DAC2, 4095 - j);
-				  _delay_ms(100);
 			  }
 }
 
 int main(void)
 {
-initialize(); //inits libs, USART and DAC
+initRBELib();
+debugUSARTInit(115200);
+initSPI();
+initTimer(0, 0, 0);
+printf("Start\n\r");
+//inits libs, USART and DAC
 
 
+while(1) triangle(0, 1);
 
-	  while(1)
-	  {
-		  //matLabDataCollect();
 
-	  }
+return 0;
+
 }

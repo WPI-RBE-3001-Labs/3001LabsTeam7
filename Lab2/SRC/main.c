@@ -65,12 +65,12 @@ void matLabDataCollect(void)
 //outputs two triangle waveforms based upon specified DAC channels
 void triangle(int DAC1, int DAC2){
 
-	for(int i = 0; i < 4096; i++){
+	for(int i = 0; i < 4096; i++){ //increments DAC SPIVal from 0 - 4095
 		setDAC(DAC1, i);
 		setDAC(DAC2, 4095 - i);
 	}
 
-	for(int j = 4095; j >= 0; j--){
+	for(int j = 4095; j >= 0; j--){ //increments DAC SPIVal from 4095 - 0
 		setDAC(DAC1, j);
 		setDAC(DAC2, 4095 - j);
 	}
@@ -82,8 +82,8 @@ initRBELib();
 debugUSARTInit(115200);
 initSPI();
 initTimer(0, 0, 0);
-printf("Start\n\r");
-//inits libs, USART and DAC
+printf("Inits Complete\n\r");
+
 
 //while(1){
 //	printf("drive link\n\r");
@@ -94,11 +94,7 @@ printf("Start\n\r");
 //	_delay_ms(1500);
 //}
 
-stopMotors();
-
-
-
+printf("End Main Function");
 
 return 0;
-
 }

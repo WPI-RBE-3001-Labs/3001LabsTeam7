@@ -57,7 +57,6 @@ void driveLink(int link, int dir){
 
 	switch (link){
 		case 0:
-
 			if(dir){
 				setDAC(2, 336);
 				setDAC(3, 0);
@@ -88,5 +87,5 @@ void driveLink(int link, int dir){
  * @todo Drive the arm to a known position using the potentiometers.
  */
 void homePos(){
-
+gotoAngles(45, 45);
 }

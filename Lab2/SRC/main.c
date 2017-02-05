@@ -19,7 +19,7 @@ volatile unsigned long intTime;
 volatile double timerCountVal = 9; //9 for ms system time
 
 void triangle(int DAC1, int DAC2);
-void initialize();
+
 
 /*
  * Timer 0 ISR triggered on overflow
@@ -61,21 +61,19 @@ void matLabDataCollect(void)
 		  	  }
 }
 
-void initialize() {
-	initRBELib();
-	debugUSARTInit(115200);
-	initSPI();
-}
 
+//outputs two triangle waveforms based upon specified DAC channels
 void triangle(int DAC1, int DAC2){
-	 for(int i = 0; i < 4096; i++){
-				  setDAC(DAC1, i);
-				  setDAC(DAC2, 4095 - i);
-			  }
-			  for(int j = 4095; j >= 0; j--){
-				  setDAC(DAC1, j);
-				  setDAC(DAC2, 4095 - j);
-			  }
+
+	for(int i = 0; i < 4096; i++){
+		setDAC(DAC1, i);
+		setDAC(DAC2, 4095 - i);
+	}
+
+	for(int j = 4095; j >= 0; j--){
+		setDAC(DAC1, j);
+		setDAC(DAC2, 4095 - j);
+	}
 }
 
 int main(void)
@@ -87,8 +85,18 @@ initTimer(0, 0, 0);
 printf("Start\n\r");
 //inits libs, USART and DAC
 
+//while(1){
+//	printf("drive link\n\r");
+//	driveLink(1, 1);
+//	_delay_ms(1500);
+//	printf("switch dir\n\r");
+//	driveLink(1, 0);
+//	_delay_ms(1500);
+//}
 
-while(1) triangle(0, 1);
+stopMotors();
+
+
 
 
 return 0;

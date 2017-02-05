@@ -76,6 +76,7 @@ void driveLink(int link, int dir){
 				setDAC(0, 0);
 				setDAC(1, -336);
 			}
+			break;
 	}
 }
 

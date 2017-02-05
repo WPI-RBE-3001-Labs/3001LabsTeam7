@@ -29,27 +29,26 @@ void setPinsDir(char port, int dir, int numPins, ...){
 
 	case 'A':
 		curPort = DDRAbits;
-	break;
+		break;
 
 
 	case 'B':
 		curPort = DDRBbits;
-	break;
+		break;
 
 	case 'C':
 		curPort = DDRCbits;
-	break;
+		break;
 
 
 	case 'D':
 		curPort = DDRDbits;
-	break;
+		break;
 
 	default:
 		printf("invalid port input");
 		return;
 		break;
-
 	}
 
 

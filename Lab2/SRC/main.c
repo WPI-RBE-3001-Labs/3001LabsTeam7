@@ -88,6 +88,14 @@ debugUSARTInit(115200);
 initSPI();
 initTimer(0, 0, 0);
 printf("Inits Complete\n\r");
+driveLink(1,1);
+float current;
+while(1){
+	current = readCurrent(1);
+	printf("%f \n\r", (double) current);
+	_delay_ms(100);
+}
+
 
 
 //while(1){
@@ -99,7 +107,7 @@ printf("Inits Complete\n\r");
 //	_delay_ms(1500);
 //}
 
-printf("End Main");
+printf("End Main\n\r");
 
 return 0;
 }

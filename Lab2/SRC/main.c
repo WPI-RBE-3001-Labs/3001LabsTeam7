@@ -18,8 +18,6 @@ volatile unsigned long timerCounter;
 volatile unsigned long intTime;
 volatile double timerCountVal = 9; //9 for ms system time
 
-void triangle(int DAC1, int DAC2);
-
 
 /*
  * Timer 0 ISR triggered on overflow
@@ -38,8 +36,10 @@ ISR(TIMER0_OVF_vect)
 	}
 }
 
-// Part 3 Matlab data collecting
-//Functional
+//*************************************************************************************************************************//
+//                    LAB1
+
+
 void matLabDataCollect(void)
 {
 		  	  while(1)
@@ -60,6 +60,8 @@ void matLabDataCollect(void)
 		  		}
 		  	  }
 }
+//*************************************************************************************************************************//
+//                         LAB2A
 
 
 //outputs two triangle waveforms based upon specified DAC channels
@@ -75,6 +77,9 @@ void triangle(int DAC1, int DAC2){
 		setDAC(DAC2, 4095 - j);
 	}
 }
+
+//*************************************************************************************************************************//
+
 
 int main(void)
 {
@@ -94,7 +99,7 @@ printf("Inits Complete\n\r");
 //	_delay_ms(1500);
 //}
 
-printf("End Main Function");
+printf("End Main");
 
 return 0;
 }

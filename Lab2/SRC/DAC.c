@@ -44,7 +44,10 @@ void setDAC(int DACn, int SPIval){
   //The bottom 4 bits are don't cares
   package3 = temp;
 
+
   //Assert the DAC
+  DAC_SS = 0;
+  DAC_SS = 1;
   DAC_SS = 0;
   //transmit the 3 packets
   spiTransceive(package1);
@@ -53,5 +56,4 @@ void setDAC(int DACn, int SPIval){
   //Toggle the SS line to load and execute
   DAC_SS = 1;
   DAC_SS = 0;
-  DAC_SS = 1;
 }

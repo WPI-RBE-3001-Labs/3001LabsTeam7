@@ -111,6 +111,15 @@ void triangle(int DAC1, int DAC2){
 	}
 }
 
+void toggleArm(int link){
+		driveLink(link, 1);
+		printf("fwd\n\r");
+		_delay_ms(100);
+		driveLink(link, 0);
+		printf("back\n\r");
+		_delay_ms(100);
+}
+
 //*************************************************************************************************************************//
 
 //                               LAB 2B
@@ -133,12 +142,8 @@ stopMotors();
 _delay_ms(2000);
 
 while(1){
-	driveLink(1, 1);
-	printf("fwd\n\r");
-	_delay_ms(2000);
-	driveLink(1, 0);
-	printf("back\n\r");
-	_delay_ms(2000);
+	toggleArm(0);
+	toggleArm(1);
 }
 
 

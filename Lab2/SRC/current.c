@@ -34,7 +34,7 @@ void initCurrentSense(int motor){
 
 /*
  * sets the direction of required pins and polls
- * channel corresponding to the motor parmaeter
+ * channel corresponding to the motor parmeter
  * then converts that value from adc ticks to
  * milliAmps
  */
@@ -42,6 +42,6 @@ float readCurrent(int motor){
 	initCurrentSense(motor);
 	initADC(motor);
 	float val = (float) getADC(motor);
-	val = (val * (7.2/1023)) - 1.6;
-	return val/10;
+	val = (val * (7.2/1023)) - 2.5;
+	return val*100;
 }

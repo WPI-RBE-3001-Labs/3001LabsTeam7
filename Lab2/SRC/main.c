@@ -20,6 +20,8 @@ volatile double timerCountVal = 9; //9 for ms system time
 float current = 0;
 
 void triangle(int DAC1, int DAC2);
+void toggleArm(int link, int time);
+void currentSense(int motor);
 
 /*
  * Timer 0 ISR triggered on overflow
@@ -68,30 +70,22 @@ void lab2(int x){
 	switch(x){
 
 	case 0: //triangle wave
-
 		while(1){
 		triangle(0,1);
 		}
-
 	break;
 
 	case 1: //current sense
-
-		while(1){
-			current = readCurrent(1);
-			printf("%f \n\r", (double) current);
-			_delay_ms(100);
-		}
-
+		currentSense(0);
 	break;
 
 	case 2: //PID
-	initSPI();
+		initSPI();
 
 	break;
 
-	case 3: //armXY
-	initSPI();
+	case 3: //armAngle
+		initSPI();
 
 	break;
 	}
@@ -111,19 +105,20 @@ void triangle(int DAC1, int DAC2){
 	}
 }
 
-void toggleArm(int link){
+void toggleArm(int link, int time){
 		driveLink(link, 1);
-		printf("fwd\n\r");
-		_delay_ms(100);
+		_delay_ms(time);
 		driveLink(link, 0);
-		printf("back\n\r");
-		_delay_ms(100);
+		_delay_ms(time);
 }
 
-//*************************************************************************************************************************//
-
-//                               LAB 2B
-
+void currentSense(int motor){
+	//while(1){
+		current = readCurrent(motor);
+		printf("Current(mA) = %f \n\r", (double) current);
+		//_delay_ms(100);
+	//}
+}
 
 //*************************************************************************************************************************//
 //                                       MAIN
@@ -138,17 +133,12 @@ debugUSARTInit(115200);
 initSPI();
 _delay_ms(2000);
 stopMotors();
-
 _delay_ms(2000);
 
 while(1){
-	toggleArm(0);
-	toggleArm(1);
+toggleArm(0, 250);
+lab2(1);
 }
-
-
-
-
 
 
 printf("End Main\n\r");

@@ -17,7 +17,9 @@ volatile unsigned long systemTime = 0;
 volatile unsigned long timerCounter;
 volatile unsigned long intTime;
 volatile double timerCountVal = 9; //9 for ms system time
+float current = 0;
 
+void triangle(int DAC1, int DAC2);
 
 /*
  * Timer 0 ISR triggered on overflow
@@ -68,14 +70,12 @@ void lab2(int x){
 	case 0: //triangle wave
 
 		while(1){
-		triangle(0, 1);
+		triangle(0,1);
 		}
 
 	break;
 
 	case 1: //current sense
-
-		float current;
 
 		while(1){
 			current = readCurrent(1);

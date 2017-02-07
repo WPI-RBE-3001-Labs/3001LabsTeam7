@@ -137,7 +137,8 @@ unsigned char getPinsVal(char port, int numPins, ...){
 		break;
 
 	default:
-		printf("invalid port input");
+		curPort = DDRAbits;
+		//printf("invalid port input");
 		break;
 
 	}

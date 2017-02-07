@@ -19,17 +19,32 @@
  * of your SS lines!
  */
 void initSPI() {
-	PORTC = 0x00;
+//	PRR = 0;
+//	PORTC = 0x00;
+//
+//	DDRD |= (OUTPUT<<DDD4);
+//	PORTD |= (HIGH<<PD4);
+//
+//	/* Set MOSI and SCK output, all others input */
+//	DDRB = (1<<DDB5)|(1<<DDB7)|(1<<DDB4);
+//	/* Enable SPI, Master, set clock rate fclk/16 */
+//	SPCR = (1<<SPE)|(1<<MSTR);
+//
+//	DDRC = 0x80;
+	PRR = 0;
 
-	DDRD |= (OUTPUT<<DDD4);
-	PORTD |= (HIGH<<PD4);
+		DDRB |= (1 << DDB5) | (1 << DDB7) | (1 << DDB4); //MOSI SCK SS enable
 
-	/* Set MOSI and SCK output, all others input */
-	DDRB = (1<<DDB5)|(1<<DDB7)|(1<<DDB4);
-	/* Enable SPI, Master, set clock rate fck/16 */
-	SPCR = (1<<SPE)|(1<<MSTR);
+		DDRD |= (1 << DDD4); //sets D4 as output
 
-	DDRC = 0x80;
+		PORTD |= (1 << PD4);//SS high to deselect
+
+		DDRB &= ~(1 << DDB6);//MISO enable
+
+		SPCR |= (1 << SPE) |  (1<<MSTR) | (1 << SPR1) | (1 << SPR0); // Enable SPI, set as master, set SCK freq, oscillation frequency/128
+
+		SPSR &= ~(1 << SPI2X);
+
 }
 
 

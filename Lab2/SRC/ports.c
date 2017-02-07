@@ -112,7 +112,6 @@ void setPinsDir(char port, int dir, int numPins, ...){
  */
 unsigned char getPinsVal(char port, int numPins, ...){
 
-
 	va_list a;
 	va_start(a, numPins);
 	__8bitreg_t curPort;
@@ -121,30 +120,29 @@ unsigned char getPinsVal(char port, int numPins, ...){
 
 	case 'A':
 		curPort = DDRAbits;
-	break;
+		break;
 
 
 	case 'B':
 		curPort = DDRBbits;
-	break;
+		break;
 
 	case 'C':
 		curPort = DDRCbits;
-	break;
+		break;
 
 
 	case 'D':
 		curPort = DDRDbits;
-	break;
+		break;
 
 	default:
 		printf("invalid port input");
-		//return 'a';
 		break;
 
 	}
 
-unsigned char out = 0x00;
+	unsigned char out = 0x00;
 
 	for(int i = 0; i <= numPins; i++){
 
@@ -153,40 +151,39 @@ unsigned char out = 0x00;
 		switch(pin){
 
 		case PORT0:
-			out |= curPort._P0;
+			out |= (1<<curPort._P0);
 			break;
 
 		case PORT1:
-			out |= curPort._P1;
+			out |= (1<<curPort._P1);
 			break;
 
 		case PORT2:
-			out |= curPort._P2;
+			out |= (1<<curPort._P2);
 			break;
 
 		case PORT3:
-			out |= curPort._P3;
+			out |= (1<<curPort._P3);
 			break;
 
 		case PORT4:
-			out |= curPort._P4;
+			out |= (1<<curPort._P4);
 			break;
 
 		case PORT5:
-			out |= curPort._P5;
+			out |= (1<<curPort._P5);
 			break;
 
 		case PORT6:
-			out |= curPort._P6;
+			out |= (1<<curPort._P6);
 			break;
 
 		case PORT7:
-			out |= curPort._P7;
+			out |= (1<<curPort._P7);
 			break;
 
 		default:
 			printf("invalid port input");
-			//return;
 			break;
 		}
 	}

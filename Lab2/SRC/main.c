@@ -86,26 +86,30 @@ int main(void)
 initRBELib();
 debugUSARTInit(115200);
 initSPI();
-initTimer(0, 0, 0);
-printf("Inits Complete\n\r");
-driveLink(1,1);
-float current;
+_delay_ms(2000);
+stopMotors();
+
+_delay_ms(2000);
+
 while(1){
-	current = readCurrent(1);
-	printf("%f \n\r", (double) current);
-	_delay_ms(100);
+	driveLink(1, 1);
+	printf("fwd\n\r");
+	_delay_ms(2000);
+	driveLink(1, 0);
+	printf("back\n\r");
+	_delay_ms(2000);
 }
 
-
-
+//float current;
 //while(1){
-//	printf("drive link\n\r");
-//	driveLink(1, 1);
-//	_delay_ms(1500);
-//	printf("switch dir\n\r");
-//	driveLink(1, 0);
-//	_delay_ms(1500);
+//	current = readCurrent(1);
+//	printf("%f \n\r", (double) current);
+//	_delay_ms(100);
 //}
+
+
+
+
 
 printf("End Main\n\r");
 

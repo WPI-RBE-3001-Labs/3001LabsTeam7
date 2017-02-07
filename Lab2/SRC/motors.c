@@ -56,28 +56,30 @@ void gotoXY(int x, int y){
 void driveLink(int link, int dir){
 
 	switch (link){
+
 		case 0:
 			if(dir){
-				setDAC(2, 336);
-				setDAC(3, 0);
-			}
-			else{
-				setDAC(2, 0);
-				setDAC(3, -336);
-			}
-			break;
-
-		case 1:
-			if(dir){
-				setDAC(0, 336);
+				setDAC(0, 3000);
 				setDAC(1, 0);
 			}
 			else{
 				setDAC(0, 0);
-				setDAC(1, -336);
+				setDAC(1, 3000);
 			}
-			break;
+		break;
+
+		case 1:
+			if(dir){
+				setDAC(2, 3000);
+				setDAC(3, 0);
+			}
+			else{
+				setDAC(2, 0);
+				setDAC(3, 3000);
+			}
+		break;
 	}
+
 }
 
 /**

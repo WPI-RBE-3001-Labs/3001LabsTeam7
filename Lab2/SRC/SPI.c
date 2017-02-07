@@ -33,17 +33,17 @@ void initSPI() {
 //	DDRC = 0x80;
 	PRR = 0;
 
-		DDRB |= (1 << DDB5) | (1 << DDB7) | (1 << DDB4); //MOSI SCK SS enable
+	DDRB |= (1 << DDB5) | (1 << DDB7) | (1 << DDB4); //MOSI SCK SS enable
 
-		DDRD |= (1 << DDD4); //sets D4 as output
+	DDRD |= (1 << DDD4); //sets D4 as output
 
-		PORTD |= (1 << PD4);//SS high to deselect
+	PORTD |= (1 << PD4);//SS high to deselect
 
-		DDRB &= ~(1 << DDB6);//MISO enable
+	DDRB &= ~(1 << DDB6);//MISO enable
 
-		SPCR |= (1 << SPE) |  (1<<MSTR) | (1 << SPR1) | (1 << SPR0); // Enable SPI, set as master, set SCK freq, oscillation frequency/128
+	SPCR |= (1 << SPE) |  (1<<MSTR) | (1 << SPR1) | (1 << SPR0); // Enable SPI, set as master, set SCK freq, oscillation frequency/128
 
-		SPSR &= ~(1 << SPI2X);
+	SPSR &= ~(1 << SPI2X);
 
 }
 
@@ -53,6 +53,6 @@ unsigned char spiTransceive(BYTE data) {
 	SPDR = data;
 	/* Wait for transmission complete */
 	while(!(SPSR & (1<<SPIF)));
-	/* Read the register to see what was sent back*/
+	/* Returns the register value */
 	return SPDR;
 }

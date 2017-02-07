@@ -46,7 +46,7 @@ void gotoXY(int x, int y){
 }
 
 /**
- * @brief Drive a link (upper or lower) in a desired direction.
+ * @brief Drive a link (upper(1) or lower(0)) in a desired direction.
  *
  * @param link Which link to control.
  * @param dir Which way to drive the link.
@@ -60,7 +60,7 @@ void driveLink(int link, int dir){
 		case 0:
 			if(dir){
 				setDAC(0, 3000);
-				setDAC(1, 0);
+				setDAC(1, 0);    //drive lower link in in a one direction
 			}
 			else{
 				setDAC(0, 0);
@@ -71,7 +71,7 @@ void driveLink(int link, int dir){
 		case 1:
 			if(dir){
 				setDAC(2, 3000);
-				setDAC(3, 0);
+				setDAC(3, 0);   //drive upper link in in a one direction
 			}
 			else{
 				setDAC(2, 0);

@@ -7,6 +7,12 @@
 #include "RBELib.h"
 #include "current.h"
 
+/*
+ * initializes the current sensor by setting
+ * the pin A to read as the input of the adc
+ * based upon motor parameter 0 for lower link
+ * motor and 1 for upper link motor
+ */
 void initCurrentSense(int motor){
 
 	switch(motor){
@@ -25,8 +31,15 @@ void initCurrentSense(int motor){
 	}
 }
 
+
+/*
+ * sets the direction of required pins and polls
+ * channel corresponding to the motor parmaeter
+ * then converts that value from adc ticks to
+ * milliAmps
+ */
 float readCurrent(int motor){
-	//initCurrentSense(motor);
+	initCurrentSense(motor);
 	initADC(motor);
 	float val = (float) getADC(motor);
 	val = (val * (7.2/1023)) - 1.6;

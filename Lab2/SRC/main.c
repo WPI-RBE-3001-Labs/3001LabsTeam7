@@ -61,10 +61,43 @@ void matLabDataCollect(void)
 		  	  }
 }
 //*************************************************************************************************************************//
-//                         LAB2A
+//                         LAB2
+void lab2(int x){
+	switch(x){
 
+	case 0: //triangle wave
 
-//outputs two triangle waveforms based upon specified DAC channels
+		while(1){
+		triangle(0, 1);
+		}
+
+	break;
+
+	case 1: //current sense
+
+		float current;
+
+		while(1){
+			current = readCurrent(1);
+			printf("%f \n\r", (double) current);
+			_delay_ms(100);
+		}
+
+	break;
+
+	case 2: //PID
+	initSPI();
+
+	break;
+
+	case 3: //armXY
+	initSPI();
+
+	break;
+	}
+}
+
+//outputs two triangle waveforms (offset by 1/2 their period) based upon specified DAC channels
 void triangle(int DAC1, int DAC2){
 
 	for(int i = 0; i < 4096; i++){ //increments DAC SPIVal from 0 - 4095
@@ -80,11 +113,19 @@ void triangle(int DAC1, int DAC2){
 
 //*************************************************************************************************************************//
 
+//                               LAB 2B
+
+
+//*************************************************************************************************************************//
+//                                       MAIN
+
+
 
 int main(void)
 {
 initRBELib();
 debugUSARTInit(115200);
+
 initSPI();
 _delay_ms(2000);
 stopMotors();
@@ -100,12 +141,6 @@ while(1){
 	_delay_ms(2000);
 }
 
-//float current;
-//while(1){
-//	current = readCurrent(1);
-//	printf("%f \n\r", (double) current);
-//	_delay_ms(100);
-//}
 
 
 

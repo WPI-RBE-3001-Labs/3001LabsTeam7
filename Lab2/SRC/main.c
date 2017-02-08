@@ -76,7 +76,10 @@ void lab2(int x){
 	break;
 
 	case 1: //current sense
-		currentSense(0);
+		while(1){
+			toggleArm(0, 250);
+			lab2(1);
+		}
 	break;
 
 	case 2: //PID
@@ -131,14 +134,18 @@ initRBELib();
 debugUSARTInit(115200);
 
 initSPI();
-_delay_ms(2000);
 stopMotors();
-_delay_ms(2000);
+initADC(2);
+initADC(3);
 
-while(1){
-toggleArm(0, 250);
-lab2(1);
-}
+//while(1){
+//	printf("UpperADC = %d \n\r", getADC(3));  //290 is the upper angle horizontal
+//	printf("LowerADC = %d \n\r", getADC(2));  //250 is the lower angle horizontal
+//}
+
+homePos();
+
+
 
 
 printf("End Main\n\r");

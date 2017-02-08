@@ -8,7 +8,8 @@
 #include "RBELib.h"
 #include "DAC.h"
 
-
+#define channelLower 2
+#define channelUpper 3
 /**
  * @brief Helper function to stop the motors on the arm.
  *
@@ -31,6 +32,18 @@ void stopMotors(){
  */
 void gotoAngles(int lowerTheta, int upperTheta){
 
+	while(potAngle(channelUpper) <= upperTheta){
+		driveLink(1, 0);
+	}
+	while(potAngle(channelUpper) >= upperTheta){
+		driveLink(1, 1);
+	}
+	while(potAngle(channelLower) <= lowerTheta){
+		driveLink(0, 0);
+	}
+	while(potAngle(channelLower) >= lowerTheta){
+		driveLink(0, 1);
+	}
 }
 
 /**
@@ -90,5 +103,11 @@ void driveLink(int link, int dir){
  * @todo Drive the arm to a known position using the potentiometers.
  */
 void homePos(){
-gotoAngles(45, 45);
+	while(getADC(2) > 250){
+		driveLink(0, 0);
+	}
+	while(getADC(3) > 290){
+		driveLink(1, 1);
+	}
+	stopMotors();
 }

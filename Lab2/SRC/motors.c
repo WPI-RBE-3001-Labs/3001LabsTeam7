@@ -33,17 +33,12 @@ void stopMotors(){
 void gotoAngles(int lowerTheta, int upperTheta){
 
 	while(potAngle(channelUpper) <= upperTheta){
-		driveLink(1, 0);
-	}
-	while(potAngle(channelUpper) >= upperTheta){
 		driveLink(1, 1);
 	}
 	while(potAngle(channelLower) <= lowerTheta){
 		driveLink(0, 0);
 	}
-	while(potAngle(channelLower) >= lowerTheta){
-		driveLink(0, 1);
-	}
+	stopMotors();
 }
 
 /**

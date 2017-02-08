@@ -137,14 +137,11 @@ initSPI();
 stopMotors();
 initADC(2);
 initADC(3);
-
-//while(1){
-//	printf("UpperADC = %d \n\r", getADC(3));  //290 is the upper angle horizontal
-//	printf("LowerADC = %d \n\r", getADC(2));  //250 is the lower angle horizontal
-//}
+_delay_ms(5000);
+printf("go\n\r");
 
 homePos();
-
+gotoAngles(90, 90);
 
 
 

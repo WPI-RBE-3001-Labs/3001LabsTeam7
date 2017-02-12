@@ -6,6 +6,8 @@
 
 
 #include "RBELib.h"
+#include "buttons.h"
+#include "current.h"
 //For use of abs()
 #include <stdlib.h>
 
@@ -132,20 +134,19 @@ int main(void)
 {
 initRBELib();
 debugUSARTInit(115200);
+//initSPI();
+//stopMotors();
+//initADC(2);
+//initADC(3);
+_delay_ms(2000);
+printf("Start\n\r");
 
-initSPI();
-stopMotors();
-initADC(2);
-initADC(3);
-_delay_ms(5000);
-printf("go\n\r");
 
-homePos();
-gotoAngles(90, 90);
+
+
 
 
 
 printf("End Main\n\r");
-
 return 0;
 }

@@ -141,7 +141,11 @@ debugUSARTInit(115200);
 _delay_ms(2000);
 printf("Start\n\r");
 
-
+initButtons();
+while(1){
+	printf("%d\n\r", readButtons());
+	_delay_ms(1000);
+}
 
 
 

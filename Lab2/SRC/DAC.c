@@ -4,15 +4,6 @@
  *  Created on: Aug 24, 2016
  *      Author: joest
  */
-
-
-/*
- * DAC.c
- *
- *  Created on: Jul 15, 2014
- *      Author: ewillcox
- */
-
 #include "RBELib.h"
 
 void setDAC(int DACn, int SPIval){

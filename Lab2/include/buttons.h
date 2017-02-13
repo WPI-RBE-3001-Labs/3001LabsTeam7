@@ -28,4 +28,6 @@ void initButtons();
 //only updates if there is a change in the button values
 char readButtons();
 
+void setMotorVoltage();
+
 #endif /* INCLUDE_BUTTONS_H_ */

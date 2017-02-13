@@ -119,25 +119,25 @@ unsigned char getPinsVal(char port, int numPins, ...){
 	switch(port){
 
 	case 'A':
-		curPort = DDRAbits;
+		curPort = PINAbits;
 		break;
 
 
 	case 'B':
-		curPort = DDRBbits;
+		curPort = PINBbits;
 		break;
 
 	case 'C':
-		curPort = DDRCbits;
+		curPort = PINCbits;
 		break;
 
 
 	case 'D':
-		curPort = DDRDbits;
+		curPort = PINDbits;
 		break;
 
 	default:
-		curPort = DDRAbits;
+		curPort = PINAbits;
 		//printf("invalid port input");
 		break;
 
@@ -152,35 +152,35 @@ unsigned char getPinsVal(char port, int numPins, ...){
 		switch(pin){
 
 		case PORT0:
-			out |= (1<<curPort._P0);
+			out |= (0>>curPort._P0);
 			break;
 
 		case PORT1:
-			out |= (1<<curPort._P1);
+			out |= (1>>curPort._P1);
 			break;
 
 		case PORT2:
-			out |= (1<<curPort._P2);
+			out |= (2>>curPort._P2);
 			break;
 
 		case PORT3:
-			out |= (1<<curPort._P3);
+			out |= (3>>curPort._P3);
 			break;
 
 		case PORT4:
-			out |= (1<<curPort._P4);
+			out |= (4>>curPort._P4);
 			break;
 
 		case PORT5:
-			out |= (1<<curPort._P5);
+			out |= (5>>curPort._P5);
 			break;
 
 		case PORT6:
-			out |= (1<<curPort._P6);
+			out |= (6>>curPort._P6);
 			break;
 
 		case PORT7:
-			out |= (1<<curPort._P7);
+			out |= (7>>curPort._P7);
 			break;
 
 		default:

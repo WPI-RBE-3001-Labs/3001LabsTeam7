@@ -47,4 +47,5 @@ void setDAC(int DACn, int SPIval){
   //Toggle the SS line to load and execute
   DAC_SS = 1;
   DAC_SS = 0;
+  DAC_SS = 1;
 }

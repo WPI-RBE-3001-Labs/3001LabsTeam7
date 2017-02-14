@@ -10,7 +10,7 @@
 #include "current.h"
 //For use of abs()
 #include <stdlib.h>
-
+#include "Periph.h"
 
 //character for receiving serial data
 char inchar;
@@ -18,12 +18,15 @@ unsigned int lowADC;
 volatile unsigned long systemTime = 0;
 volatile unsigned long timerCounter;
 volatile unsigned long intTime;
-volatile double timerCountVal = 9; //9 for ms system time
+volatile double timerCountVal = 90; //9 for ms system time
 float current = 0;
+int encCheck = FALSE;
 
 void triangle(int DAC1, int DAC2);
 void toggleArm(int link, int time);
 void currentSense(int motor);
+
+
 
 /*
  * Timer 0 ISR triggered on overflow
@@ -31,9 +34,10 @@ void currentSense(int motor);
 ISR(TIMER0_OVF_vect)
 {
 	timerCounter++;
-	//counts to make 1ms timer
-	if (timerCounter >=timerCountVal)
+	//counts to make 10ms timer
+	if (timerCounter >= timerCountVal)
 	{
+	encCheck = TRUE;
 	//Port C pin 0 flip for prelab part 8
 	//PORTC ^= (1 << 0);
 	timerCounter=0;
@@ -41,6 +45,55 @@ ISR(TIMER0_OVF_vect)
 	intTime++;
 	}
 }
+
+
+//*************************************************************************************************************************//
+//                                       MAIN
+
+
+
+int main(void)
+{
+initRBELib();
+debugUSARTInit(115200);
+initSPI();
+stopMotors();
+encInit(0);
+initButtons();
+//initADC(2);
+//initADC(3);
+_delay_ms(2000);
+initTimer(0, 0, 0);
+
+
+while(1){
+	setMotorVoltage();
+
+	if(encCheck){
+		readEncoders(0);
+		encCheck = FALSE;
+		resetEncoderCount(0);
+	}
+
+
+}
+
+
+
+printf("End Main\n\r");
+return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
 
 //*************************************************************************************************************************//
 //                    LAB1
@@ -123,34 +176,4 @@ void currentSense(int motor){
 		printf("Current(mA) = %f \n\r", (double) current);
 		//_delay_ms(100);
 	//}
-}
-
-//*************************************************************************************************************************//
-//                                       MAIN
-
-
-
-int main(void)
-{
-initRBELib();
-debugUSARTInit(115200);
-//initSPI();
-//stopMotors();
-//initADC(2);
-//initADC(3);
-_delay_ms(2000);
-printf("Start\n\r");
-
-initButtons();
-while(1){
-	printf("%d\n\r", readButtons());
-	_delay_ms(1000);
-}
-
-
-
-
-
-printf("End Main\n\r");
-return 0;
 }

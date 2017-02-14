@@ -26,8 +26,10 @@ void initButtons();
 
 //returns a char of the button values
 //only updates if there is a change in the button values
-char readButtons();
+unsigned char readButtons();
 
 void setMotorVoltage();
+
+int buttonToInt(unsigned char button);
 
 #endif /* INCLUDE_BUTTONS_H_ */

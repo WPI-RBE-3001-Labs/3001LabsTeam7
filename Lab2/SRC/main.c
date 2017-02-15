@@ -21,6 +21,8 @@ volatile unsigned long intTime;
 volatile double timerCountVal = 9; //9 for ms system time
 float current = 0;
 int encCheck = FALSE;
+int accelCheck = FALSE;
+int potCheck = FALSE;
 
 void triangle(int DAC1, int DAC2);
 void toggleArm(int link, int time);
@@ -66,9 +68,9 @@ resetEncCount(0);
 while(1){
 	setMotorVoltage();
 	if(encCheck){
-		encCount(0);
+		printf("%d\n\r", encCount(0));
 		encCheck = FALSE;
-		//resetEncCount(0);
+		resetEncCount(0);
 	}
 }
 
@@ -77,8 +79,6 @@ while(1){
 printf("End Main\n\r");
 return 0;
 }
-
-
 
 
 

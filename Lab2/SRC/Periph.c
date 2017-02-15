@@ -22,6 +22,7 @@ signed long package1 = 0;
 signed long package2 = 0;
 signed long package3 = 0;
 signed long package4 = 0;
+int gVal = 0;
 
 
 /**
@@ -32,8 +33,6 @@ signed long package4 = 0;
  * @todo Create a function that is able to find the acceleration of a given axis.
  */
 signed int getAccel(int axis){
-
-	int gVal = 0;
 
 	PORTD &= ~(1<<PD7); // assert SS
 

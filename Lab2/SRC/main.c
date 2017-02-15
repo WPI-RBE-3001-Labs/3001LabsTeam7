@@ -18,7 +18,7 @@ unsigned int lowADC;
 volatile unsigned long systemTime = 0;
 volatile unsigned long timerCounter;
 volatile unsigned long intTime;
-volatile double timerCountVal = 90; //9 for ms system time
+volatile double timerCountVal = 9; //9 for ms system time
 float current = 0;
 int encCheck = FALSE;
 
@@ -60,22 +60,16 @@ initSPI();
 stopMotors();
 encInit(0);
 initButtons();
-//initADC(2);
-//initADC(3);
-_delay_ms(2000);
 initTimer(0, 0, 0);
-
+resetEncCount(0);
 
 while(1){
 	setMotorVoltage();
-
 	if(encCheck){
-		readEncoders(0);
+		encCount(0);
 		encCheck = FALSE;
-		resetEncoderCount(0);
+		//resetEncCount(0);
 	}
-
-
 }
 
 

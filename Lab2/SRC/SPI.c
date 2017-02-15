@@ -19,29 +19,23 @@
  * of your SS lines!
  */
 void initSPI() {
-//	PRR = 0;
-//	PORTC = 0x00;
-//
-//	DDRD |= (OUTPUT<<DDD4);
-//	PORTD |= (HIGH<<PD4);
-//
-//	/* Set MOSI and SCK output, all others input */
-//	DDRB = (1<<DDB5)|(1<<DDB7)|(1<<DDB4);
-//	/* Enable SPI, Master, set clock rate fclk/16 */
-//	SPCR = (1<<SPE)|(1<<MSTR);
-//
-//	DDRC = 0x80;
+
 	PRR = 0;
 
 	DDRB |= (1 << DDB5) | (1 << DDB7) | (1 << DDB4); //MOSI SCK SS enable
 
-	DDRD |= (1 << DDD4); //sets D4 as output
+	DDRD |= (1 << DDD4) | (1 << DDD7); //sets D4 as output for DAC
+									   // sets D7 as output for Accelerometer
 
-	PORTD |= (1 << PD4);//SS high to deselect
+	DDRC |= (1 << DDC4) | (1 << DDC5); //sets C4 and C5 as outputs for Encoders
 
-	DDRB &= ~(1 << DDB6);//MISO enable
+	PORTD |= (1 << PD4); // SS high to deselect
 
-	SPCR |= (1 << SPE) |  (1<<MSTR) | (1 << SPR1) | (1 << SPR0); // Enable SPI, set as master, set SCK freq, oscillation frequency/128
+	PORTC |= (1 << PC4) | (1 << PC5); // SS high to deselect
+
+	DDRB &= ~(1 << DDB6); //MISO enable
+
+	SPCR |= (1 << SPE) |  (1<<MSTR) | (1 << SPR1) | (1 << SPR0); // Enable SPI, set as master, set SCK frequency to oscillation frequency/128
 
 	SPSR &= ~(1 << SPI2X);
 

@@ -80,82 +80,107 @@ int main(void)
 	initRBELib();
 	debugUSARTInit(115200);
 	initSPI();
-	stopMotors();
-	encInit(0);
-	//initADC(2);
-	//initADC(3);
-	initButtons();
-	initTimer(0, 0, 0);
-	resetEncCount(0);
-	setConst('H',20.0,0.01,0.1);
-	setConst('L',20.0,0.01,0.1);
+	//stopMotors();
+	//encInit(0);
+	initADC(2);
+	initADC(3);
+	//initButtons();
+	//initTimer(0, 0, 0);
+	//resetEncCount(0);
+	//setConst('H',20.0,0.01,0.1);
+	//setConst('L',20.0,0.01,0.1);
 
-	static int state = __ENC;
-	while(1){
-	switch(state){
-
-	case __PID:
-		while(1){
-
-				  //PID run in interrupt
-				  lowSetP=angleToADCLow(0);
-				  highSetP=angleToADCHigh(90);
-
-				  printf("adcL: %d\n\r",lowSetP);
-				  printf("adcH: %d \n\r",highSetP);
-				 // _delay_ms(2000);
-
-
-				  lowSetP=angleToADCLow(90);
-				  highSetP=angleToADCHigh(0);
-				  printf("adcL: %d\n\r",lowSetP);
-				  printf("adcH: %d\n\r",highSetP);
-
-				 // _delay_ms(2000);
-
-			  }
-		break;
-
-	case __ENC:
-
-		while(1){
-				setMotorVoltage();
-				if(encCheck){
-					printf("encCount = %d\n\r", (int) encCount(0));
-					encCheck = FALSE;
-					resetEncCount(0);
-				}
-			}
-		break;
-
-	case __ACCEL:
-		while(1){
-			if(accelCheck){
-				printf("x = %d  y = %d  z = %d\n\r", getAccel(0), getAccel(1), getAccel(2));
-				//printf("y = %d\n\r", getAccel(1));
-				//printf("z = %d\n\r", getAccel(2));
-				accelCheck = FALSE;
-				}
-		}
-		break;
-
-	case __POT:
-		while(1){
-			if(potCheck){
-				//idk some pot stuff !!! dont forget to init ADCs
-				potCheck = FALSE;
-			}
-		}
-	break;
-
-	}}
-
-//while(1){
-//	printf("adc2val = %d\n\r", getADC(2));
-//	printf("adc3val = %d\n\r", getADC(3));
+//	static int state = __ACCEL;
+//	if(state == __ACCEL){
+//		initRBELib();
+//		debugUSARTInit(115200);
+//		initSPI();
+//		initTimer(0, 0, 0);
+//	}
+//	else if(state == __ENC){
+//		initRBELib();
+//		debugUSARTInit(115200);
+//		initSPI();
+//		stopMotors();
+//		encInit(0);
+//		initTimer(0, 0, 0);
+//		resetEncCount(0);
+//	}
+//	else if(state == __PID){
+//		initRBELib();
+//		debugUSARTInit(115200);
+//		initSPI();
+//		stopMotors();
+//		initButtons();
+//		initTimer(0, 0, 0);
+//		setConst('H',20.0,0.01,0.1);
+//		setConst('L',20.0,0.01,0.1);
+//		initADC(2);
+//		initADC(3);
+//	}
+//	while(1){
+//	switch(state){
 //
-//}
+//	case __PID:
+//		while(1){
 //
+//				  //PID run in interrupt
+//				  lowSetP=angleToADCLow(0);
+//				  highSetP=angleToADCHigh(90);
+//
+//				  printf("adcL: %d\n\r",lowSetP);
+//				  printf("adcH: %d \n\r",highSetP);
+//				 // _delay_ms(2000);
+//
+//
+//				  lowSetP=angleToADCLow(90);
+//				  highSetP=angleToADCHigh(0);
+//				  printf("adcL: %d\n\r",lowSetP);
+//				  printf("adcH: %d\n\r",highSetP);
+//
+//				 // _delay_ms(2000);
+//
+//			  }
+//		break;
+//
+//	case __ENC:
+//
+//		while(1){
+//				setMotorVoltage();
+//				if(encCheck){
+//					printf("encCount = %d\n\r", (int) encCount(0));
+//					encCheck = FALSE;
+//					resetEncCount(0);
+//				}
+//			}
+//		break;
+//
+//	case __ACCEL:
+//		while(1){
+//			if(accelCheck){
+//				printf("x = %d  y = %d  z = %d\n\r", getAccel(0), getAccel(1), getAccel(2));
+//				//printf("y = %d\n\r", getAccel(1));
+//				//printf("z = %d\n\r", getAccel(2));
+//				accelCheck = FALSE;
+//				}
+//		}
+//		break;
+//
+//	case __POT:
+//		while(1){
+//			if(potCheck){
+//				//idk some pot stuff !!! dont forget to init ADCs
+//				potCheck = FALSE;
+//			}
+//		}
+//	break;
+//
+//	}}
+
+while(1){
+	printf("lowerval = %d higherval = %d\n\r", getADC(2), getADC(3));
+}
+
 
 
 printf("End Main\n\r");

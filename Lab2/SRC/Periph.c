@@ -12,7 +12,7 @@
 
 #define clr_byte  0x00
 #define cntr_byte 0x20
-#define read_byte 0x40
+#define read_byte 0x60
 
 
 signed long count = 0;
@@ -87,7 +87,7 @@ void resetEncCount(int chan){
 	encSSHigh();
 	chooseEnc(chan);
 	spiTransceive(clr_byte);
-	//spiTransceive(0x00);
+	spiTransceive(0x00);
 	encSSHigh();
 }
 

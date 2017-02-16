@@ -6,6 +6,7 @@
  *      Author: coshea
  */
 #include "sensors.h"
+#include "Periph.h"
 
 
 int EncoderCounts( int __chan ){

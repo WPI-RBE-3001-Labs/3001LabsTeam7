@@ -10,12 +10,10 @@
 #include "RBELib.h"
 #include "SlaveSelects.h"
 
-#define clr_byte 0x00
+#define clr_byte  0x00
 #define cntr_byte 0x20
 #define read_byte 0x40
 
-void chooseEnc(int chan);
-void encSSHigh();
 
 signed long count = 0;
 signed long package1 = 0;
@@ -89,7 +87,7 @@ void resetEncCount(int chan){
 	encSSHigh();
 	chooseEnc(chan);
 	spiTransceive(clr_byte);
-	spiTransceive(0x00);
+	//spiTransceive(0x00);
 	encSSHigh();
 }
 
@@ -118,8 +116,8 @@ signed long encCount(int chan){
 }
 /*
  * slave select based on channel input
- * chan = 0 -> lower link
- * chan = 1 -> upper link
+ * chan = 0 - lower link
+ * chan = 1 - upper link
  */
 void chooseEnc(int chan){  //slave selects based on channel input
 	if(!chan) ENCODER_SS_0 = LOW;

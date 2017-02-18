@@ -14,6 +14,62 @@
 #define cntr_byte 0x20
 #define read_byte 0x60
 
+//Count modes
+#define NQUAD 0x00 //non-quadrature mode
+#define QUADRX1 0x01 //X1 quadrature mode
+#define QUADRX2 0x02 //X2 quadrature mode
+#define QUADRX4 0x03 //X4 quadrature mode
+//Running modes
+#define FREE_RUN 0x00
+#define SINGE_CYCLE 0x04
+#define RANGE_LIMIT 0x08
+#define MODULO_N 0x0C
+//Index modes
+#define DISABLE_INDX 0x00 //index_disabled
+#define INDX_LOADC 0x10 //index_load_CNTR
+#define INDX_RESETC 0x20 //index_rest_CNTR
+#define INDX_LOADO 0x30 //index_load_OL
+#define ASYNCH_INDX 0x00 //asynchronous index
+#define SYNCH_INDX 0x80 //synchronous index
+//Clock filter modes
+#define FILTER_1 0x00 //filter clock frequncy division factor 1
+#define FILTER_2 0x80 //filter clock frequncy division factor 2
+/* **MDR1 configuration data; any of these***
+ ***data segments can be ORed together***/
+//Flag modes
+#define NO_FLAGS 0x00 //all flags disabled
+#define IDX_FLAG 0x10; //IDX flag
+#define CMP_FLAG 0x20; //CMP flag
+#define BW_FLAG 0x40; //BW flag
+#define CY_FLAG 0x80; //CY flag
+//1 to 4 bytes data-width
+#define BYTE_4 0x00; //four byte mode
+#define BYTE_3 0x01; //three byte mode
+#define BYTE_2 0x02; //two byte mode
+#define BYTE_1 0x03; //one byte mode
+//Enable/disable counter
+#define EN_CNTR 0x00; //counting enabled
+#define DIS_CNTR 0x04 //counting disabled
+
+/* LS7366R op-code list */
+#define CLR_MDR0 0x08
+#define CLR_MDR1 0x10
+#define CLR_CNTR 0x20
+#define CLR_STR 0x30
+#define READ_MDR0 0x48
+#define READ_MDR1 0x50
+#define READ_CNTR 0x60
+#define READ_OTR 0x68
+#define READ_STR 0x70
+#define WRITE_MDR1 0x90
+#define WRITE_MDR0 0x88
+#define WRITE_DTR 0x98
+#define LOAD_CNTR 0xE0
+#define LOAD_OTR 0xE4
+#define Slave_Select_Low PORTB &= ~(1 << PB4)
+#define Slave_Select_High PORTB |= (1 << PB4)
+/*Configure and initialize the SPI on PortB of uC*/
+
 
 signed long count = 0;
 signed long package1 = 0;
@@ -66,15 +122,16 @@ void encInit(int chan){
 	DDRC |= 0x30;
 
 	chooseEnc(chan);  // slave select
-
-	spiTransceive(0x88); //Select MDR0 and set to write
-	spiTransceive(0x03);
+	spiTransceive(CLR_CNTR);
 	encSSHigh();
-
 	chooseEnc(chan);
-	spiTransceive(0x48); //Select MDR0 register and read
-	encSSHigh(); //slave deselect
-
+	spiTransceive(WRITE_MDR0);
+	spiTransceive(QUADRX1|FREE_RUN|DISABLE_INDX|ASYNCH_INDX|FILTER_1);
+	encSSHigh();
+	chooseEnc(chan);
+	spiTransceive(WRITE_MDR1);
+	spiTransceive(0x02);
+	encSSHigh();
 }
 
 /**
@@ -86,8 +143,7 @@ void encInit(int chan){
 void resetEncCount(int chan){
 	encSSHigh();
 	chooseEnc(chan);
-	spiTransceive(clr_byte);
-	spiTransceive(0x00);
+	spiTransceive(CLR_CNTR);
 	encSSHigh();
 }
 
@@ -99,14 +155,14 @@ void resetEncCount(int chan){
  * @todo Find the current encoder ticks on a given channel.
  */
 signed long encCount(int chan){
-
+	encSSHigh();
 	chooseEnc(chan); // assert SS for Encoder
 
-	spiTransceive(read_byte | cntr_byte);
-	package1 = (spiTransceive(0x00) << 24);
-	package2 = (spiTransceive(0x00) << 16);
-	package3 = (spiTransceive(0x00) << 8);
-	package4 = spiTransceive(0x00);
+	spiTransceive(READ_CNTR);
+	package1 = (spiTransceive(0) << 24);
+	package2 = (spiTransceive(0) << 16);
+	package3 = (spiTransceive(0) << 8);
+	package4 = spiTransceive(0);
 
 	encSSHigh(); //deassert encoders
 	count = (signed long) (package1 | package2 | package3 | package4); //creates a signed long that contains the results of all spiTransceives bitshifted
@@ -122,7 +178,6 @@ signed long encCount(int chan){
 void chooseEnc(int chan){  //slave selects based on channel input
 	if(!chan) ENCODER_SS_0 = LOW;
 	else ENCODER_SS_1 = LOW;
-
 }
 
 /*

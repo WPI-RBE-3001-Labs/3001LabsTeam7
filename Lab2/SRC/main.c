@@ -6,16 +6,15 @@
 
 
 #include "RBELib.h"
-#include "buttons.h"
-#include "current.h"
 //For use of abs()
 #include <stdlib.h>
+#include "buttons.h"
+#include "current.h"
 #include "Periph.h"
 #include "sensors.h"
 #include "PID.h"
 
-//character for receiving serial data
-char inchar;
+
 unsigned int lowADC;
 volatile unsigned long systemTime = 0;
 volatile unsigned long timerCounter;
@@ -37,17 +36,15 @@ volatile double adctoanglelow = 3.66;
 volatile int offSethigh = 247;
 volatile double adctoanglehigh = 4.16;
 
-void triangle(int DAC1, int DAC2);
-void toggleArm(int link, int time);
-void currentSense(int motor);
 int angleToADCLow(int angle);
 int angleToADCHigh(int angle);
 void updatePIDLink(char link,int setPoint);
 int inits(int in);
 
-#define __ACCEL 3
-#define __ENC 1
+
 #define __PID 0
+#define __ENC 1
+#define __ACCEL 3
 #define __POT 4
 #define __OTHER 5
 
@@ -176,14 +173,6 @@ return 0;
 
 /**************************************************************************************************************************************************************************/
 
-
-
-
-
-
-
-
-
 int inits(int in){
 	static int state = __ACCEL;
 	switch(state){
@@ -228,6 +217,7 @@ int inits(int in){
 	}
 
 }
+
 
 void updatePIDLink(char link,int setPoint)
 {
@@ -279,6 +269,7 @@ case 'L':
 	}
 }
 
+
 int angleToADCLow(int angle)
 {
 	//double offsetadclow = angle + offSetlow ;
@@ -287,6 +278,7 @@ int angleToADCLow(int angle)
 	return adclow;
 }
 
+
 // Takes in angle and returns adc value for higher link 0-180
 int angleToADCHigh(int angle)
 {
@@ -294,94 +286,4 @@ int angleToADCHigh(int angle)
 	double adchigh =  ( angle * adctoanglehigh)+ offSethigh;
 
 	return adchigh;
-}
-
-
-
-
-
-
-
-
-//*************************************************************************************************************************//
-//                    LAB1
-
-
-void matLabDataCollect(void)
-{
-		  	  while(1)
-		  	  {
-		  		  //The get char debug function will return when a character is received
-		  		  inchar = getCharDebug();
-		  		  //Comment out this line once you have it working correctly
-		  		 //printf("This line will print when a character is received from the serial connection \n\r");
-
-		  		if (inchar == 'A')
-		  		{
-		  			//Switch which print statement is commented out when your ready for matlab data collection example
-		  			//matlab will buffer all characters until \n\r
-		  			for(int i=0;i<=1249;i++)
-		  			{
-
-		  			}
-		  		}
-		  	  }
-}
-//*************************************************************************************************************************//
-//                         LAB2
-void lab2(int x){
-	switch(x){
-
-	case 0: //triangle wave
-		while(1){
-		triangle(0,1);
-		}
-	break;
-
-	case 1: //current sense
-		while(1){
-			toggleArm(0, 250);
-			lab2(1);
-		}
-	break;
-
-	case 2: //PID
-		initSPI();
-
-	break;
-
-	case 3: //armAngle
-		initSPI();
-
-	break;
-	}
-}
-
-//outputs two triangle waveforms (offset by 1/2 their period) based upon specified DAC channels
-void triangle(int DAC1, int DAC2){
-
-	for(int i = 0; i < 4096; i++){ //increments DAC SPIVal from 0 - 4095
-		setDAC(DAC1, i);
-		setDAC(DAC2, 4095 - i);
-	}
-
-	for(int j = 4095; j >= 0; j--){ //increments DAC SPIVal from 4095 - 0
-		setDAC(DAC1, j);
-		setDAC(DAC2, 4095 - j);
-	}
-}
-
-void toggleArm(int link, int time){
-		driveLink(link, 1);
-		_delay_ms(time);
-		driveLink(link, 0);
-		_delay_ms(time);
-}
-
-void currentSense(int motor){
-	//while(1){
-		current = readCurrent(motor);
-		printf("Current(mA) = %f \n\r", (double) current);
-		//_delay_ms(100);
-	//}
 }

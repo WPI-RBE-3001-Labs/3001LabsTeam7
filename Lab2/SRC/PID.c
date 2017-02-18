@@ -69,6 +69,7 @@
 //}
 
 #include "RBELib.h"
+#include "PID.h"
 /**
  * @brief Sets the Kp, Ki, and Kd values for 1 link.
  * @details to set the values, use the following style

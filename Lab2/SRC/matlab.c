@@ -6,6 +6,7 @@
  */
 
 #include "matlab.h"
+#include "USARTDebug.h"
 
 char inchar;
 

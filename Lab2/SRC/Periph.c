@@ -10,10 +10,6 @@
 #include "RBELib.h"
 #include "SlaveSelects.h"
 
-#define clr_byte  0x00
-#define cntr_byte 0x20
-#define read_byte 0x60
-
 //Count modes
 #define NQUAD 0x00 //non-quadrature mode
 #define QUADRX1 0x01 //X1 quadrature mode
@@ -77,6 +73,11 @@ signed long package2 = 0;
 signed long package3 = 0;
 signed long package4 = 0;
 int gVal = 0;
+float range;
+float m = 0;
+float k = 0;  //GET CONSTANTS
+float b = 0;
+int d = 0;
 
 
 /**
@@ -108,7 +109,10 @@ signed int getAccel(int axis){
  * @todo Make a function that is able to get the ADC value of the IR sensor.
  */
 int IRDist(int chan){
-	return 0; //fix later
+	d = (int) getADC(chan);
+	range = (1/((m*d) + b)) - k;
+	printf("d = %d  |  range = %d\n\r", d, (int) range);
+	return d;
 }
 
 /**
@@ -159,9 +163,9 @@ signed long encCount(int chan){
 	chooseEnc(chan); // assert SS for Encoder
 
 	spiTransceive(READ_CNTR);
-	package1 = (spiTransceive(0) << 24);
-	package2 = (spiTransceive(0) << 16);
-	package3 = (spiTransceive(0) << 8);
+	package1 = spiTransceive(0) << 24;
+	package2 = spiTransceive(0) << 16;
+	package3 = spiTransceive(0) << 8;
 	package4 = spiTransceive(0);
 
 	encSSHigh(); //deassert encoders

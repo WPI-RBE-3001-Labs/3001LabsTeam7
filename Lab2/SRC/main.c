@@ -20,7 +20,7 @@ volatile unsigned long systemTime = 0;
 volatile unsigned long timerCounter;
 volatile unsigned long intTime;
 volatile double timerCountVal = 9; //9 for ms system time
-float current = 0;
+
 int encCheck = FALSE;
 int accelCheck = FALSE;
 int potCheck = FALSE;
@@ -240,7 +240,7 @@ case 'H':
 		}
 		else{
 			printf("else");
-			setDAC(2, 0 );
+			setDAC(2, -pidNum);
 			setDAC(3, 0);
 		}
 	}

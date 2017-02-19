@@ -12,10 +12,6 @@
 #include "USARTDebug.h"
 
 unsigned int lowADC;
-volatile unsigned long systemTime = 0;
-volatile unsigned long timerCounter;
-volatile unsigned long intTime;
-volatile double timerCountVal = 9; //9 for ms system time
 float current = 0;
 
 

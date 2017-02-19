@@ -34,17 +34,17 @@
  ***data segments can be ORed together***/
 //Flag modes
 #define NO_FLAGS 0x00 //all flags disabled
-#define IDX_FLAG 0x10; //IDX flag
-#define CMP_FLAG 0x20; //CMP flag
-#define BW_FLAG 0x40; //BW flag
-#define CY_FLAG 0x80; //CY flag
+#define IDX_FLAG 0x10 //IDX flag
+#define CMP_FLAG 0x20 //CMP flag
+#define BW_FLAG 0x40 //BW flag
+#define CY_FLAG 0x80 //CY flag
 //1 to 4 bytes data-width
-#define BYTE_4 0x00; //four byte mode
-#define BYTE_3 0x01; //three byte mode
-#define BYTE_2 0x02; //two byte mode
-#define BYTE_1 0x03; //one byte mode
+#define BYTE_4 0x00 //four byte mode
+#define BYTE_3 0x01 //three byte mode
+#define BYTE_2 0x02 //two byte mode
+#define BYTE_1 0x03 //one byte mode
 //Enable/disable counter
-#define EN_CNTR 0x00; //counting enabled
+#define EN_CNTR 0x00 //counting enabled
 #define DIS_CNTR 0x04 //counting disabled
 
 /* LS7366R op-code list */
@@ -75,7 +75,7 @@ signed long package4 = 0;
 int gVal = 0;
 float range;
 float m = 0;
-float k = 0;  //GET CONSTANTS
+float k = 4.0;  //GET CONSTANTS
 float b = 0;
 int d = 0;
 
@@ -123,7 +123,7 @@ int IRDist(int chan){
  */
 void encInit(int chan){
 
-	DDRC |= 0x30;
+	DDRC |= 0x30; //0x00110000b  -- CS ENABLE
 
 	chooseEnc(chan);  // slave select
 	spiTransceive(CLR_CNTR);
@@ -134,7 +134,7 @@ void encInit(int chan){
 	encSSHigh();
 	chooseEnc(chan);
 	spiTransceive(WRITE_MDR1);
-	spiTransceive(0x02);
+	spiTransceive(NO_FLAGS | BYTE_2 | EN_CNTR);
 	encSSHigh();
 }
 
@@ -163,13 +163,11 @@ signed long encCount(int chan){
 	chooseEnc(chan); // assert SS for Encoder
 
 	spiTransceive(READ_CNTR);
-	package1 = spiTransceive(0) << 24;
-	package2 = spiTransceive(0) << 16;
-	package3 = spiTransceive(0) << 8;
-	package4 = spiTransceive(0);
+	count  = spiTransceive(0xff) << 8;
+	count |= spiTransceive(0xff);
 
 	encSSHigh(); //deassert encoders
-	count = (signed long) (package1 | package2 | package3 | package4); //creates a signed long that contains the results of all spiTransceives bitshifted
+	//count = (signed long) (package1 | package2 | package3 | package4); //creates a signed long that contains the results of all spiTransceives bitshifted
 	//printf("count = %d\n\r", count);
 	if(chan) count = -count; // accounts for difference in upper and lower encoders
 	return count;
@@ -180,6 +178,7 @@ signed long encCount(int chan){
  * chan = 1 - upper link
  */
 void chooseEnc(int chan){  //slave selects based on channel input
+	encSSHigh();
 	if(!chan) ENCODER_SS_0 = LOW;
 	else ENCODER_SS_1 = LOW;
 }
@@ -190,5 +189,13 @@ void chooseEnc(int chan){  //slave selects based on channel input
 void encSSHigh(){
 	ENCODER_SS_0 = HIGH;
 	ENCODER_SS_1 = HIGH;
+}
+
+float encToDeg(int chan){
+
+	float ticks = encCount(chan);
+	if(!chan) return ticks/(48.0*172.0/(360.0*2.0));
+	else return ticks/10.0;
+	return 0;
 }
 

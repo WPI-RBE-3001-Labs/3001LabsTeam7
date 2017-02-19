@@ -13,8 +13,10 @@
 #include "Periph.h"
 #include "sensors.h"
 #include "PID.h"
+#include "servo.h"
 
-
+int set = 0;//for servo
+static int state = 0;
 unsigned int lowADC;
 volatile unsigned long systemTime = 0;
 volatile unsigned long timerCounter;
@@ -102,7 +104,7 @@ ISR(TIMER0_OVF_vect)
 int main(void)
 {
 	while(1){
-	switch(inits(__ENC)){
+	switch(inits(__OTHER)){
 
 	case __PID:
 		while(1){
@@ -160,7 +162,17 @@ int main(void)
 
 	case __OTHER:
 		while(1){
-			printf("lowerval = %d higherval = %d\n\r", getADC(2), getADC(3));
+			//printf("lowerval = %d higherval = %d\n\r", getADC(2), getADC(3));
+			if(set) {
+				close(0);
+				printf("closed\n\r");
+			}
+			else {
+				open(0);
+				printf("open\n\r");
+			}
+			_delay_ms(2000);
+			set = !set;
 		}
 	break;
 
@@ -174,7 +186,7 @@ return 0;
 /**************************************************************************************************************************************************************************/
 
 int inits(int in){
-	static int state = __ACCEL;
+	state = in;
 	switch(state){
 	case __ACCEL:
 		initRBELib();
@@ -210,6 +222,11 @@ int inits(int in){
 	break;
 
 	default:
+		initRBELib();
+		debugUSARTInit(115200);
+		initSPI();
+		stopMotors();
+		//printf("inits done");
 		return __OTHER;
 	break;
 

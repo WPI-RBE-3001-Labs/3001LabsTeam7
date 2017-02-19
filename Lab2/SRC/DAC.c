@@ -38,8 +38,6 @@ void setDAC(int DACn, int SPIval){
 
   //Assert the DAC
   DAC_SS = 0;
-  DAC_SS = 1;
-  DAC_SS = 0;
   //transmit the 3 packets
   spiTransceive(package1);
   spiTransceive(package2);

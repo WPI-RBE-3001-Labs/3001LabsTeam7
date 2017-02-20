@@ -74,10 +74,12 @@ signed long package3 = 0;
 signed long package4 = 0;
 int gVal = 0;
 float range;
-float m = 0;
-float k = 4.0;  //GET CONSTANTS
-float b = 0;
+float m = 0.97;
+float k = 4.2;  //GET CONSTANTS
+float b = 4.2;
 int d = 0;
+int numLoops = 1;
+float v = 0;
 
 
 /**
@@ -110,9 +112,12 @@ signed int getAccel(int axis){
  */
 int IRDist(int chan){
 	d = (int) getADC(chan);
-	range = (1/((m*d) + b)) - k;
-	printf("d = %d  |  range = %d\n\r", d, (int) range);
-	return d;
+	//m += d/((d+k)*numLoops);
+	numLoops++;
+	v = d*(5/1023);
+	range = ((1/((m*v) + b))) - k;
+	//printf("adc = %d  |  1/(R+k) = %f  |  m = %f  |  range = %f\n\r", d, 1/(d+k), d/(d+k), range);
+	return range;
 }
 
 /**

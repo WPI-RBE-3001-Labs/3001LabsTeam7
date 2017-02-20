@@ -163,19 +163,20 @@ int main(void)
 	case __OTHER:
 		while(1){
 			//printf("lowerval = %d higherval = %d\n\r", getADC(2), getADC(3));
-			if(set) {
-				close(0);
-				printf("closed\n\r");
-			}
-			else {
-				open(0);
-				printf("open\n\r");
-			}
-			_delay_ms(2000);
-			set = !set;
+//			if(set) {
+//				close(0);
+//				printf("closed\n\r");
+//			}
+//			else {
+//				open(0);
+//				printf("open\n\r");
+//			}
+//			_delay_ms(2000);
+//			set = !set;
+			IRDist(4);
+			_delay_ms(250);
 		}
 	break;
-
 	}
 	}
 printf("End Main\n\r");
@@ -225,6 +226,7 @@ int inits(int in){
 		initRBELib();
 		debugUSARTInit(115200);
 		initSPI();
+		initADC(4);
 		stopMotors();
 		//printf("inits done");
 		return __OTHER;

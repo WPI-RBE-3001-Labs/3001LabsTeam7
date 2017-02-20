@@ -5,28 +5,25 @@
  *      Author: coshea
  */
 
+#include "RBELib.h"
 #include "matlab.h"
 #include "USARTDebug.h"
+#include "ADC.h"
 
-char inchar;
+unsigned long adc;
 
 void matLabDataCollect(void)
 {
 		  	  while(1)
 		  	  {
-		  		  //The get char debug function will return when a character is received
-		  		  inchar = getCharDebug();
-		  		  //Comment out this line once you have it working correctly
-		  		 //printf("This line will print when a character is received from the serial connection \n\r");
-
-		  		if (inchar == 'A')
-		  		{
-		  			//Switch which print statement is commented out when your ready for matlab data collection example
 		  			//matlab will buffer all characters until \n\r
 		  			for(int i=0;i<=1249;i++)
 		  			{
-
+		  				adc = getADC(4);
+		  				printf("%d", adc);
+		  				printf(",");
+		  				_delay_us(1);
 		  			}
-		  		}
+		  			printf("\n\r");
 		  	  }
 }

@@ -163,8 +163,11 @@ int main(void)
 	case __OTHER:
 		while(1){
 			//printf("lowerval = %d higherval = %d\n\r", getADC(2), getADC(3));
+
+
+
 //			if(set) {
-//				close(0);
+//				open(0);
 //				printf("closed\n\r");
 //			}
 //			else {
@@ -173,8 +176,11 @@ int main(void)
 //			}
 //			_delay_ms(2000);
 //			set = !set;
-			IRDist(4);
-			_delay_ms(250);
+close(0);
+
+
+//			IRDist(4);
+//			_delay_ms(250);
 		}
 	break;
 	}

@@ -21,5 +21,10 @@ void close(int chan);
  */
 void open(int chan);
 
+/*
+ * runs the belt
+ */
+void belt(int chan);
+
 
 #endif /* INCLUDE_SERVO_H_ */

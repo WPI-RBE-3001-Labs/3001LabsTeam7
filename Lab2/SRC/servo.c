@@ -14,3 +14,7 @@ void close(int chan){
 void open(int chan){
 	setServo(chan, LOWVAL);
 }
+
+void belt(int chan){
+	setServo(chan, HIGHVAL);
+}

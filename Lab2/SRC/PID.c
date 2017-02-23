@@ -125,7 +125,7 @@ void setConst(char link, float Kp, float Ki, float Kd)
  */
 signed int calcPID(char link, int setPoint, int actPos)
 {
-	long error = actPos - setPoint;
+	long error = setPoint - actPos;
 	long pidValue = 0;
 	if (link == 'L')
 	{
@@ -133,8 +133,6 @@ signed int calcPID(char link, int setPoint, int actPos)
 		pidPrev_L = pidValue;
 		pidPrevLastError_L = pidLastError_L;
 		pidLastError_L = error;
-
-
 	}
 	else
 	{

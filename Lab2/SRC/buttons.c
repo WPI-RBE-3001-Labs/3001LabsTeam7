@@ -7,6 +7,7 @@
  */
 #include "buttons.h"
 #include "DAC.h"
+#include "motors.h"
 
 char oldBits, newBits = 0x00;
 #define BIT0 0x00000001b
@@ -47,8 +48,7 @@ v = buttonToInt(readButtons());
 	switch(v){
 
 	case 1: // 0 Volts
-		setDAC(0, 4095);
-		setDAC(1, 4095);
+		stopMotors();
 		//printf("case 1\n\r");
 		break;
 	case 2: // 3 Volts

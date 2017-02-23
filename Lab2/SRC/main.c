@@ -19,8 +19,8 @@ int set = 0;//for servo
 static int state = 0;
 unsigned int lowADC;
 volatile unsigned long systemTime = 0;
-volatile unsigned long timerCounter;
-volatile unsigned long intTime;
+volatile unsigned long timerCounter = 0;
+volatile unsigned long intTime = 0;
 volatile double timerCountVal = 9; //9 for ms system time
 
 int encCheck = FALSE;
@@ -32,11 +32,11 @@ volatile long lowLinkErr;
 volatile int highSetP;
 volatile int lowSetP;
 
-volatile int offSetlow = 775;
-volatile double adctoanglelow = 3.66;
+volatile int offSetlow = 407;
+volatile double adctoanglelow = .2142857143;
 
-volatile int offSethigh = 247;
-volatile double adctoanglehigh = 4.16;
+volatile int offSethigh = 447;
+volatile double adctoanglehigh = .2189781022;
 
 int angleToADCLow(int angle);
 int angleToADCHigh(int angle);
@@ -49,28 +49,29 @@ int inits(int in);
 #define __ACCEL 3
 #define __POT 4
 #define __OTHER 5
+#define __TESTING 6
 
 /*
  * Timer 0 ISR triggered on overflow
  */
-ISR(TIMER0_OVF_vect)
-{
-	timerCounter++;
-	//counts to make 10ms timer
-	if (timerCounter >= timerCountVal)
-	{
-	encCheck = TRUE;
-	accelCheck = TRUE;
-	potCheck = TRUE;
-	//Port C pin 0 flip for prelab part 8
-	//PORTC ^= (1 << 0);
-	timerCounter=0;
-	systemTime++;
-	intTime++;
-	}
-}
+//ISR(TIMER0_OVF_vect)
+//{
+//	timerCounter++;
+//	//counts to make 10ms timer
+//	if (timerCounter >= timerCountVal)
+//	{
+//	encCheck = TRUE;
+//	accelCheck = TRUE;
+//	potCheck = TRUE;
+//	//Port C pin 0 flip for prelab part 8
+//	//PORTC ^= (1 << 0);
+//	timerCounter=0;
+//	systemTime++;
+//	intTime++;
+//	}
+//}
 
-//                                                      PID ISR
+                                                     // PID ISR
 //ISR(TIMER0_OVF_vect)
 //{
 //	timerCounter++;
@@ -115,7 +116,7 @@ int main(void)
 
 				  printf("adcL: %d\n\r",lowSetP);
 				  printf("adcH: %d \n\r",highSetP);
-				 // _delay_ms(2000);
+				  _delay_ms(2000);
 
 
 				  lowSetP=angleToADCLow(90);
@@ -123,32 +124,9 @@ int main(void)
 				  printf("adcL: %d\n\r",lowSetP);
 				  printf("adcH: %d\n\r",highSetP);
 
-				 // _delay_ms(2000);
+				  _delay_ms(2000);
 
 			  }
-		break;
-
-	case __ENC:
-
-		while(1){
-				setMotorVoltage();
-				if(encCheck){
-					printf("encCount = %d\n\r", (int) encCount(0));
-					encCheck = FALSE;
-					resetEncCount(0);
-				}
-			}
-		break;
-
-	case __ACCEL:
-		while(1){
-			if(accelCheck){
-				printf("x = %d  y = %d  z = %d\n\r", getAccel(0), getAccel(1), getAccel(2));
-				//printf("y = %d\n\r", getAccel(1));
-				//printf("z = %d\n\r", getAccel(2));
-				accelCheck = FALSE;
-				}
-		}
 		break;
 
 	case __POT:
@@ -161,27 +139,33 @@ int main(void)
 	break;
 
 	case __OTHER:
+		setConst('H',20.0,0.01,0.1);
+		setConst('L',20.0,0.01,0.1);
 		while(1){
-			//printf("lowerval = %d higherval = %d\n\r", getADC(2), getADC(3));
-
-
-
-//			if(set) {
-//				open(0);
-//				printf("closed\n\r");
+//			setMotorVoltage();
+//			double val;
+//			int offset = 580;
+//			double adctoangle = .2142857143;
+//			while(1){
+//				setMotorVoltage();
+//				val = getADC(2);
+//				printf("lowerval = %d   ", (int) val);
+//				val = val - offset;
+//				val = val * adctoangle;
+//				printf("angle = %d\n\r", (int) val);
+//				_delay_ms(5);
 //			}
-//			else {
-//				open(0);
-//				printf("open\n\r");
-//			}
-//			_delay_ms(2000);
-//			set = !set;
-close(0);
-
-
+		updatePIDLink('H', angleToADCHigh(45));
+		//printf("%d\n\r", getADC(3));
+//
 //			IRDist(4);
 //			_delay_ms(250);
 		}
+	break;
+
+	case __TESTING:
+
+
 	break;
 	}
 	}
@@ -219,12 +203,12 @@ int inits(int in){
 		debugUSARTInit(115200);
 		initSPI();
 		stopMotors();
-		initButtons();
-		initTimer(0, 0, 0);
+		//initButtons();
+		//initTimer(0, 0, 0);
 		setConst('H',20.0,0.01,0.1);
 		setConst('L',20.0,0.01,0.1);
 		initADC(2);
-		initADC(3);
+		//initADC(3);
 		return __PID;
 	break;
 
@@ -232,8 +216,11 @@ int inits(int in){
 		initRBELib();
 		debugUSARTInit(115200);
 		initSPI();
-		initADC(4);
+		initADC(2);
+		initADC(3);
+		initButtons();
 		stopMotors();
+
 		//printf("inits done");
 		return __OTHER;
 	break;
@@ -242,7 +229,6 @@ int inits(int in){
 	}
 
 }
-
 
 void updatePIDLink(char link,int setPoint)
 {
@@ -257,7 +243,7 @@ case 'H':
 		long pidNum = calcPID('H', setPoint, getADC(3));
 		//printf("H \n\r");
 		printf(" ADC: %d,Set: %d",getADC(3),setPoint);
-		printf(" PId: %ld, \n\r",pidNum);
+		printf(" PID: %ld, \n\r",pidNum);
 		if (pidNum >= 0){
 			printf("pidNum>=0");
 			setDAC(2, 0);
@@ -279,8 +265,8 @@ case 'L':
 	else{
 		long pidNum = calcPID('L', setPoint, getADC(2));
 		//printf("L \n\r");
-		//printf(" ADC: %d,Set: %d",getADC(2),setPoint);
-		//printf(" PId: %ld, \n\r",pidNum);
+		printf(" ADC: %d,Set: %d",getADC(2),setPoint);
+		printf(" PID: %ld, \n\r",pidNum);
 		if (pidNum >= 0)		{
 			setDAC(0, pidNum);
 			setDAC(1, 0);
@@ -298,7 +284,7 @@ case 'L':
 int angleToADCLow(int angle)
 {
 	//double offsetadclow = angle + offSetlow ;
-	double adclow =  ( angle * adctoanglelow)+ offSetlow;
+	double adclow =  ( angle / adctoanglelow) + offSetlow;
 
 	return adclow;
 }
@@ -308,7 +294,7 @@ int angleToADCLow(int angle)
 int angleToADCHigh(int angle)
 {
 	//double offsetadclow = angle + offSetlow ;
-	double adchigh =  ( angle * adctoanglehigh)+ offSethigh;
+	double adchigh =  ( angle / adctoanglehigh)+ offSethigh;
 
 	return adchigh;
 }

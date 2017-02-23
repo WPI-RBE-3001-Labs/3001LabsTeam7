@@ -116,7 +116,7 @@ int IRDist(int chan){
 	numLoops++;
 	v = d*(5/1023);
 	range = ((1/((m*v) + b))) - k;
-	//printf("adc = %d  |  1/(R+k) = %f  |  m = %f  |  range = %f\n\r", d, 1/(d+k), d/(d+k), range);
+	printf("adc = %d  |  1/(R+k) = %f  |  m = %f  |  range = %f\n\r", d, 1/(d+k), d/(d+k), range);
 	return range;
 }
 

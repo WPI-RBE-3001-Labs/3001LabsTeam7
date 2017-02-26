@@ -38,6 +38,9 @@ volatile double adctoanglelow = .2142857143;
 volatile int offSethigh = 447;
 volatile double adctoanglehigh = .2189781022;
 
+static int s = 0;
+int b;
+
 int angleToADCLow(int angle);
 int angleToADCHigh(int angle);
 void updatePIDLink(char link,int setPoint);
@@ -139,9 +142,6 @@ int main(void)
 	break;
 
 	case __OTHER:
-		setConst('H',20.0,0.01,0.1);
-		setConst('L',20.0,0.01,0.1);
-		while(1){
 //			setMotorVoltage();
 //			double val;
 //			int offset = 580;
@@ -157,18 +157,61 @@ int main(void)
 //			}
 		//updatePIDLink('H', angleToADCHigh(45));
 		//printf("%d\n\r", getADC(3));
-//	setDAC(2, 0);
-//	setDAC(3, 512+256+128);
-//
-			IRDist(4);
-			_delay_ms(250);
-
+		switch(s){
+		case 0:
+			b = buttonToInt(readButtons());
+			if(b == 0){
+				printf("waiting for button press\n\r");
+			}
+			else{
+				printf("button pressed");
+				s = b;
+				break;
+			}
+			break;
+		case 1://homePos
+			b = buttonToInt(readButtons());
+			if(b == 0){
+				updatePIDLink('L', angleToADCLow(45));
+				printf("current = %f\n\r", readCurrent(0));
+			}
+			else{
+				s = b;
+				break;
+			}
+			break;
+		case 2: //open gripper
+			b = buttonToInt(readButtons());
+			if(b == 0){
+				open(0);
+			}
+			else{
+				s = b;
+				break;
+			}
+			break;
+		case 3: //close gripper
+			b = buttonToInt(readButtons());
+			if(b == 0){
+				close(0);
+			}
+			else{
+				s = b;
+				break;
+			}
+			break;
+		case 4: // 90 degrees
+			b = buttonToInt(readButtons());
+			if(b == 0){
+				updatePIDLink('L', angleToADCLow(90));
+			}
+			else{
+				s = b;
+				break;
+			}
+			break;
 		}
-	break;
-
-	case __TESTING:
-
-
+		b = 0;
 	break;
 	}
 	}
@@ -222,9 +265,12 @@ int inits(int in){
 		initADC(2);
 		initADC(3);
 		initButtons();
+		initCurrentSense(0);
 		//stopMotors();
+		//setConst('H',20.0,0.01,0.1);
+		setConst('L',20.0,0.01,0.1);
 
-		//printf("inits done");
+		printf("inits done");
 		return __OTHER;
 	break;
 

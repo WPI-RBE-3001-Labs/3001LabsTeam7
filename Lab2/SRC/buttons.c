@@ -25,7 +25,7 @@ int v;
 //initializes buttons to port C inputs
 void initButtons(){
 	DDRCbits._P0 = INPUT;
-	DDRCbits._P4 = INPUT;
+	DDRCbits._P2 = INPUT;
 	DDRCbits._P3 = INPUT;
 	DDRCbits._P6 = INPUT;
 }

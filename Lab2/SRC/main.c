@@ -155,11 +155,14 @@ int main(void)
 //				printf("angle = %d\n\r", (int) val);
 //				_delay_ms(5);
 //			}
-		updatePIDLink('H', angleToADCHigh(45));
+		//updatePIDLink('H', angleToADCHigh(45));
 		//printf("%d\n\r", getADC(3));
+//	setDAC(2, 0);
+//	setDAC(3, 512+256+128);
 //
-//			IRDist(4);
-//			_delay_ms(250);
+			IRDist(4);
+			_delay_ms(250);
+
 		}
 	break;
 
@@ -219,7 +222,7 @@ int inits(int in){
 		initADC(2);
 		initADC(3);
 		initButtons();
-		stopMotors();
+		//stopMotors();
 
 		//printf("inits done");
 		return __OTHER;

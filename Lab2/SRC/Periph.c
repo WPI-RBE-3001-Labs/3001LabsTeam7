@@ -75,8 +75,10 @@ signed long package4 = 0;
 int gVal = 0;
 float range;
 float m = 0.97;
-float k = 4.2;  //GET CONSTANTS
-float b = 4.2;
+float k = 4.0;  //GET CONSTANTS
+float b = 1;
+float mdot = 1.0/0.97;
+float bdot = 1/1;
 int d = 0;
 int numLoops = 1;
 float v = 0;
@@ -110,14 +112,47 @@ signed int getAccel(int axis){
  *
  * @todo Make a function that is able to get the ADC value of the IR sensor.
  */
-int IRDist(int chan){
-	d = (int) getADC(chan);
-	//m += d/((d+k)*numLoops);
-	numLoops++;
-	v = d*(5/1023);
-	range = ((1/((m*v) + b))) - k;
-	printf("adc = %d  |  1/(R+k) = %f  |  m = %f  |  range = %f\n\r", d, 1/(d+k), d/(d+k), range);
-	return range;
+float IRDist(int chan){
+	d = getADC(chan);
+	if(d > 70){
+		if(d > 142){
+			printf("16.5\n\r");
+			return 16.5;
+		}
+		else if(d >  130){
+			printf("17.5\n\r");
+			return 17.5;
+		}
+		else if(d >  106){
+			printf("18.5\n\r");
+			return 18.5;
+		}
+		else if(d >  86){
+			printf("19.5\n\r");
+			return 19.5;
+		}
+		else if(d >  76){
+			printf("20.5\n\r");
+			return 20.5;
+		}
+		else{
+			printf("21.5\n\r");
+			return 21.5;
+		}
+	}
+	else{
+		printf("0\n\r");
+		return 0;
+	}
+	//d = 16.5cm ir = 160
+	//d = 17.5cm ir = 142
+	//d = 18.5   ir = 130
+	//d = 19.5cm ir = 106
+	//d = 20.5cm ir = 86
+	//d = 21.5cm ir = 76
+//	range = (mdot/(v+bdot))-k;
+//	printf("adc = %d  |  1/(R+k) = %f  |  m = %f  |  range = %f\n\r", d, 1/(d+k), d/(d+k), range);
+//	return (int) range;
 }
 
 /**

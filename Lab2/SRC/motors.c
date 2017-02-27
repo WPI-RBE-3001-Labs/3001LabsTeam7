@@ -1,12 +1,12 @@
 /*
  * motors.c
-
  *
  *  Created on: Feb 4, 2017
  *      Author: ttruong
  */
 #include "RBELib.h"
 #include "DAC.h"
+#include "kinematics.h"
 
 #define channelLower 2
 #define channelUpper 3

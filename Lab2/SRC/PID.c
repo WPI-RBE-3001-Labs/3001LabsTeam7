@@ -2,18 +2,6 @@
 #include "RBELib.h"
 #include "PID.h"
 
-volatile long highLinkErr;
-volatile long lowLinkErr;
-
-volatile int highSetP;
-volatile int lowSetP;
-
-volatile int offSetlow = 407;
-volatile double adctoanglelow = .2142857143;
-
-volatile int offSethigh = 447;
-volatile double adctoanglehigh = .2189781022;
-
 
 /**
  * @brief Sets the Kp, Ki, and Kd values for 1 link.
@@ -69,8 +57,8 @@ void setConst(char link, float Kp, float Ki, float Kd)
  */
 signed int calcPID(char link, int setPoint, int actPos)
 {
-	long error = setPoint - actPos;
-	long pidValue = 0;
+	volatile long error = setPoint - actPos;
+	volatile long pidValue = 0;
 	if (link == 'L')
 	{
 		pidValue = pidPrev_L + pidConsts.Kp_L * ((1 + pidTi_inv_L + pidTd_L) * error  + (-1 - 2 * pidTd_L) * pidLastError_L + pidTd_L * pidPrevLastError_L);
@@ -85,77 +73,10 @@ signed int calcPID(char link, int setPoint, int actPos)
 		pidPrevLastError_H = pidLastError_H;
 		pidLastError_H = error;
 	}
-	if(pidValue>4000) pidValue=4000;
-	if(pidValue<-4000) pidValue=-4000;
+	if(pidValue>6000) pidValue=6000;
+	if(pidValue<-6000) pidValue=-6000;
 	return pidValue;
 }
 
-void updatePIDLink(char link,int setPoint)
-{
-switch(link){
-case 'H':
-	//1000 to 250
-	if (FALSE){
-		setDAC(2, 0);
-		setDAC(3, 0);
-	}
-	else{
-		long pidNum = calcPID('H', setPoint, getADC(3));
-		//printf("H \n\r");
-		printf(" ADC: %d,Set: %d",getADC(3),setPoint);
-		printf(" PID: %ld, \n\r",pidNum);
-		if (pidNum >= 0){
-			printf("pidNum>=0");
-			setDAC(2, 0);
-			setDAC(3, pidNum);
-		}
-		else{
-			printf("else");
-			setDAC(2, -pidNum);
-			setDAC(3, 0);
-		}
-	}
-	break;
-case 'L':
-	//1000 to 250
-	if (FALSE){
-		setDAC(0, 0);
-		setDAC(1, 0);
-	}
-	else{
-		long pidNum = calcPID('L', setPoint, getADC(2));
-		//printf("L \n\r");
-		printf(" ADC: %d,Set: %d",getADC(2),setPoint);
-		printf(" PID: %ld, \n\r",pidNum);
-		if (pidNum >= 0)		{
-			setDAC(0, pidNum);
-			setDAC(1, 0);
-		}
-		else{
-			setDAC(0, 0);
-			setDAC(1, -pidNum);
-		}
-	}
-	break;
-	}
-}
 
-
-int angleToADCLow(int angle)
-{
-	//double offsetadclow = angle + offSetlow ;
-	double adclow =  ( angle / adctoanglelow) + offSetlow;
-
-	return adclow;
-}
-
-
-// Takes in angle and returns adc value for higher link 0-180
-int angleToADCHigh(int angle)
-{
-	//double offsetadclow = angle + offSetlow ;
-	double adchigh =  ( angle / adctoanglehigh)+ offSethigh;
-
-	return adchigh;
-}
 

@@ -10,39 +10,8 @@
 #include "avr/io.h"
 #include <avr/interrupt.h>
 
-/**
- * @brief Initializes the SPI bus for communication with all of your
- * SPI devices.
- *
- * @todo Create the function that will allow you to initialize the SPI
- * in a mode compatible with all devices.  Do not forget to deassert all
- * of your SS lines!
- */
-//void initSPI() {
-//
-//	PRR = 0;
-//
-//	DDRB |= (1 << DDB5) | (1 << DDB7) | (1 << DDB4); //MOSI SCK SS enable
-//
-//	DDRD |= (1 << DDD4) | (1 << DDD7); //sets D4 as output for DAC
-//									   // sets D7 as output for Accelerometer
-//
-//	DDRC |= (1 << DDC4) | (1 << DDC5); //sets C4 and C5 as outputs for Encoders
-//
-//	PORTD |= ~(1 << PD4); // SS low for soft reset
-//
-//	PORTD |= (1 << PD4); // SS high to deselect
-//
-//	PORTC |= (1 << PC4) | (1 << PC5); // SS high to deselect
-//
-//	DDRB &= ~(1 << DDB6); //MISO enable
-//
-//	SPCR |= (1 << SPE) |  (1<<MSTR) | (1 << SPR1) | (1 << SPR0); // Enable SPI, set as master, set SCK frequency to oscillation frequency/128
-//
-//	SPSR &= ~(1 << SPI2X);
-//
-//}
-void initSPI(void){
+
+void initSPI(){
   //Master SS line = output
   SPI_MASTER_SS = OUTPUT;
   //MOSI = output
@@ -67,8 +36,8 @@ void initSPI(void){
   //Important after soft-resets.  Then deassert.
   DAC_SS = 0;
   DAC_SS = 1;
-DDRDbits._P7=OUTPUT;
-PORTDbits._P7=1;
+  DDRDbits._P7=OUTPUT;
+  PORTDbits._P7=1;
   //Encoders SS lines = outputs
   ENCODER_SS_0_ddr = OUTPUT;
   ENCODER_SS_1_ddr = OUTPUT;

@@ -40,10 +40,7 @@ void initCurrentSense(int motor){
  * then converts that value from adc ticks to
  * milliAmps
  */
-float readCurrent(int motor){
-	initCurrentSense(motor);
-	initADC(motor);
-	float val = (float) getADC(motor);
-	val = (val * (7.2/1023)) - 2.5;
-	return val*100;
+int readCurrent(int motor){
+	int val = getADC(motor);
+	return val;
 }

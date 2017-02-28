@@ -73,8 +73,8 @@ signed int calcPID(char link, int setPoint, int actPos)
 		pidPrevLastError_H = pidLastError_H;
 		pidLastError_H = error;
 	}
-	if(pidValue>6000) pidValue=6000;
-	if(pidValue<-6000) pidValue=-6000;
+	if(pidValue>4000) pidValue=4000;
+	if(pidValue<-4000) pidValue=-4000;
 	return pidValue;
 }
 

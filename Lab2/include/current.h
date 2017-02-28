@@ -11,7 +11,7 @@
 
 void initCurrentSense(int motor);
 
-float readCurrent(int motor);
+int readCurrent(int motor);
 
 
 #endif /* INCLUDE_CURRENT_H_ */

@@ -13,7 +13,6 @@ double degtoRad(double angle);
 
 //double calcPos(int JA1, int JA2);
 
-void inverse(float *theta1, float *theta2, float x, float y);
 
 //returns mem loc of xy position of the end effector
 //double * calcPos(double JA1, double JA2);

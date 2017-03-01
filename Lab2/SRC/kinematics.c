@@ -26,19 +26,26 @@ double * calcPos(int JA1, int JA2){
 	return xyPos; //returns mem loc of xy coords of end effector
 }
 
-void inverse(float *theta1, float *theta2, float x, float y){
-	y -= L0;
 
-	float x2 = x*x;
-	float y2 = y*y;
-	float a1 = L1*L1;
-	float a2 = L2*L2;
-
-	float b = atan2(y,x);
-	float g = acos((x2 + y2 + a1 - a2)/(2*L1*sqrt(x2+y2)));
-	float theta1a = (b+g)*(180.0/M_PI) - 90.0;
-	float theta1b = (b-g)*(180.0/M_PI) - 90.0;
-
-	*theta2 = acos(((x2 + y2) - (a1 + a2))/(2*L1*L2))* 180.0/M_PI - 90.0;
-
-}
+//double * inverse(float x, float y){
+//	y -= L0;
+//
+//	float x2 = x*x;
+//	float y2 = y*y;
+//	float a1 = L1*L1;
+//	float a2 = L2*L2;
+//
+//	float b = atan2(y,x);
+//	float g = acos((x2 + y2 + a1 - a2)/(2*L1*sqrt(x2+y2)));
+//	float theta1a = (b+g)*(180.0/M_PI) - 90.0;
+//	float theta1b = (b-g)*(180.0/M_PI) - 90.0;
+//	float theta2 = acos(((x2 + y2) - (a1 + a2))/(2*L1*L2))* 180.0/M_PI - 90.0;
+//
+//	static double jointValues[3];
+//
+//	jointValues[0] = theta1a;
+//	jointValues[1] = theta1b;
+//	jointValues[2] = theta2;
+//
+//	return jointValues;
+//}

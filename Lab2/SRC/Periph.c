@@ -116,32 +116,32 @@ float IRDist(int chan){
 	d = getADC(chan);
 	if(d > 70){
 		if(d > 142){
-			printf("16.5\n\r");
+			//printf("16.5\n\r");
 			return 16.5;
 		}
 		else if(d >  130){
-			printf("17.5\n\r");
+			//printf("17.5\n\r");
 			return 17.5;
 		}
 		else if(d >  106){
-			printf("18.5\n\r");
+			//printf("18.5\n\r");
 			return 18.5;
 		}
 		else if(d >  86){
-			printf("19.5\n\r");
+			//printf("19.5\n\r");
 			return 19.5;
 		}
 		else if(d >  76){
-			printf("20.5\n\r");
+			//printf("20.5\n\r");
 			return 20.5;
 		}
 		else{
-			printf("21.5\n\r");
+			//printf("21.5\n\r");
 			return 21.5;
 		}
 	}
 	else{
-		printf("0\n\r");
+		//printf("0\n\r");
 		return 0;
 	}
 	//d = 16.5cm ir = 160
@@ -150,9 +150,6 @@ float IRDist(int chan){
 	//d = 19.5cm ir = 106
 	//d = 20.5cm ir = 86
 	//d = 21.5cm ir = 76
-//	range = (mdot/(v+bdot))-k;
-//	printf("adc = %d  |  1/(R+k) = %f  |  m = %f  |  range = %f\n\r", d, 1/(d+k), d/(d+k), range);
-//	return (int) range;
 }
 
 /**

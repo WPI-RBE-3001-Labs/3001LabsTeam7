@@ -20,5 +20,6 @@ int inits(int in);
 
 #define __POT 1
 #define __OTHER 2
+#define __USART 3
 
 #endif /* INCLUDE_MAIN_H_ */

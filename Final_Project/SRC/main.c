@@ -8,13 +8,13 @@
 volatile unsigned long systemTime = 0;
 volatile unsigned long timerCounter = 0;
 volatile unsigned long intTime = 0;
-volatile double timerCountVal = 9; //9 for ms system time
+volatile double timerCountVal = 90; //90 for 10ms system time or 100Hz
 
 static int s = 0;
 int b;
 
-int upperAngle = 0;
-int lowerAngle = 0;
+int upperADC = 0;
+int lowerADC = 0;
 
 void initMain();
 
@@ -46,8 +46,8 @@ ISR(TIMER0_OVF_vect)
 	timerCounter++; //counts to make 1ms timer
 	if (timerCounter >= timerCountVal)
 	{
-	//updatePIDLink('L', angleToADCLow(lowerAngle));
-	//updatePIDLink('H', angleToADCHigh(upperAngle));
+	updatePIDLink('L', lowerADC);
+	updatePIDLink('H', upperADC);   //PID runs in interrupt
 	timerCounter=0;
 	systemTime++;
 	intTime++;
@@ -66,12 +66,12 @@ int main()
 		switch(s){
 		case 0: //WAIT FOR START
 			b = buttonToInt(readButtons());
-			printf("b = %d\n\r", b);
 			if(b == 0){
 				printf("waiting for button press\n\r");
 			}
 			else{
 				s = b;
+				initTimer(0,0,0);  // INITS TIMER
 				break;
 			}
 			break;
@@ -134,7 +134,6 @@ void initMain(){
 		stopMotors();
 		setConst('H',20.0,0.01,0.1);
 		setConst('L',20.0,0.01,0.1);
-		//initTimer(0,0,0);
 }
 
 void sorting(){
@@ -166,46 +165,56 @@ int sort(){
 
 void sortMove(int in){
 	printf("%d\n\r", in);
-	if(in) drop();
+	if(in) dropOtherSide();
 	else open(0);
 }
 
 void drop(){
 	for(int i = 0; i < 5000; i++){
-		home();
+		other();
 	}
 	open(0);
 }
 
 void dropOtherSide(){
 	for(int i = 0; i < 10000; i++){
-		other();
+		home();
 	}
 	open(0);
 }
 
 void home(){
-	updatePIDLink('L', angleToADCLow(80));
-	updatePIDLink('H', 740);
+//	updatePIDLink('H', 740);
+//	updatePIDLink('L', angleToADCLow(80));
+	upperADC = 740;
+	lowerADC = angleToADCLow(80);
 }
 
 void other(){
-	updatePIDLink('H', 780);
-	updatePIDLink('L', 470);
+//	updatePIDLink('H', 780);
+//	updatePIDLink('L', 470);
+	upperADC = 780;
+	lowerADC = 470;
 }
 
 void set1(){ //
-	updatePIDLink('H', 710);
-	updatePIDLink('L', 355);
+//	updatePIDLink('H', 710);
+//	updatePIDLink('L', 355);
+	upperADC = 720;
+	lowerADC = 355;
 }
 
 void set2(){
-	updatePIDLink('H', 400);
-	updatePIDLink('L', 680);
+//	updatePIDLink('H', 400);
+//	updatePIDLink('L', 680);
+	upperADC = 480;
+	lowerADC = 680;
 }
 
 void set3(){ //
-	updatePIDLink('H', 385);
-	updatePIDLink('L', 723);
+//	updatePIDLink('H', 385);
+//	updatePIDLink('L', 723);
+	upperADC = 385;
+	lowerADC = 723;
 }
 

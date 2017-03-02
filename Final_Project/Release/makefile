@@ -31,56 +31,56 @@ endif
 
 # Add inputs and outputs from these tool invocations to the build variables 
 LSS += \
-Final_Project_3001.lss \
+Final_Project.lss \
 
 FLASH_IMAGE += \
-Final_Project_3001.hex \
+Final_Project.hex \
 
 EEPROM_IMAGE += \
-Final_Project_3001.eep \
+Final_Project.eep \
 
 SIZEDUMMY += \
 sizedummy \
 
 
 # All Target
-all: Final_Project_3001.elf secondary-outputs
+all: Final_Project.elf secondary-outputs
 
 # Tool invocations
-Final_Project_3001.elf: $(OBJS) $(USER_OBJS)
+Final_Project.elf: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: AVR C Linker'
-	avr-gcc -Wl,-Map,Final_Project_3001.map -Wl,-u,vfprintf -lprintf_flt -lm -L"C:\Users\coshea\Desktop\3001_Workspace\RBELib\Release" -mmcu=atmega644p -o "Final_Project_3001.elf" $(OBJS) $(USER_OBJS) $(LIBS)
+	avr-gcc -Wl,-Map,Final_Project.map -Wl,-u,vfprintf -lprintf_flt -lm -L"C:\Users\coshea\Desktop\3001_Workspace\RBELib\Release" -mmcu=atmega644p -o "Final_Project.elf" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
-Final_Project_3001.lss: Final_Project_3001.elf
+Final_Project.lss: Final_Project.elf
 	@echo 'Invoking: AVR Create Extended Listing'
-	-avr-objdump -h -S Final_Project_3001.elf  >"Final_Project_3001.lss"
+	-avr-objdump -h -S Final_Project.elf  >"Final_Project.lss"
 	@echo 'Finished building: $@'
 	@echo ' '
 
-Final_Project_3001.hex: Final_Project_3001.elf
+Final_Project.hex: Final_Project.elf
 	@echo 'Create Flash image (ihex format)'
-	-avr-objcopy -R .eeprom -R .fuse -R .lock -R .signature -O ihex Final_Project_3001.elf  "Final_Project_3001.hex"
+	-avr-objcopy -R .eeprom -R .fuse -R .lock -R .signature -O ihex Final_Project.elf  "Final_Project.hex"
 	@echo 'Finished building: $@'
 	@echo ' '
 
-Final_Project_3001.eep: Final_Project_3001.elf
+Final_Project.eep: Final_Project.elf
 	@echo 'Create eeprom image (ihex format)'
-	-avr-objcopy -j .eeprom --no-change-warnings --change-section-lma .eeprom=0 -O ihex Final_Project_3001.elf  "Final_Project_3001.eep"
+	-avr-objcopy -j .eeprom --no-change-warnings --change-section-lma .eeprom=0 -O ihex Final_Project.elf  "Final_Project.eep"
 	@echo 'Finished building: $@'
 	@echo ' '
 
-sizedummy: Final_Project_3001.elf
+sizedummy: Final_Project.elf
 	@echo 'Invoking: Print Size'
-	-avr-size --format=avr --mcu=atmega644p Final_Project_3001.elf
+	-avr-size --format=avr --mcu=atmega644p Final_Project.elf
 	@echo 'Finished building: $@'
 	@echo ' '
 
 # Other Targets
 clean:
-	-$(RM) $(FLASH_IMAGE)$(ELFS)$(OBJS)$(ASM_DEPS)$(EEPROM_IMAGE)$(S_DEPS)$(SIZEDUMMY)$(S_UPPER_DEPS)$(LSS)$(C_DEPS) Final_Project_3001.elf
+	-$(RM) $(FLASH_IMAGE)$(ELFS)$(OBJS)$(ASM_DEPS)$(EEPROM_IMAGE)$(S_DEPS)$(SIZEDUMMY)$(S_UPPER_DEPS)$(LSS)$(C_DEPS) Final_Project.elf
 	-@echo ' '
 
 secondary-outputs: $(LSS) $(FLASH_IMAGE) $(EEPROM_IMAGE) $(SIZEDUMMY)

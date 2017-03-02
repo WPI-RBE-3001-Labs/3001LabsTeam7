@@ -32,7 +32,7 @@
 								<option id="de.innot.avreclipse.compiler.option.optimize.1553517497" name="Optimization Level" superClass="de.innot.avreclipse.compiler.option.optimize" value="de.innot.avreclipse.compiler.optimize.size" valueType="enumerated"/>
 								<option id="de.innot.avreclipse.compiler.option.incpath.779955019" name="Include Paths (-I)" superClass="de.innot.avreclipse.compiler.option.incpath" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/RBELib/include/RBELib}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/Lab2/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/Final_Project_3001/include}&quot;"/>
 								</option>
 								<inputType id="de.innot.avreclipse.compiler.winavr.input.3995489" name="C Source Files" superClass="de.innot.avreclipse.compiler.winavr.input"/>
 							</tool>

@@ -5,8 +5,6 @@
  */
 #include "main.h"
 
-static int state = 0;
-unsigned int lowADC;
 volatile unsigned long systemTime = 0;
 volatile unsigned long timerCounter = 0;
 volatile unsigned long intTime = 0;
@@ -14,36 +12,11 @@ volatile double timerCountVal = 9; //9 for ms system time
 
 static int s = 0;
 int b;
-int angle;
-char comp;
-float val = 0;
-float loops = 0;
-int avg = 0;
-
-volatile long highLinkErr;
-volatile long lowLinkErr;
-
-volatile int highSetP;
-volatile int lowSetP;
-
-volatile int offSetlow = 420;
-volatile double adctoanglelow = .257142857;
-
-volatile int offSethigh = 410;
-volatile double adctoanglehigh = .225;
 
 int upperAngle = 0;
 int lowerAngle = 0;
 
-int angleToADCLow(int angle);
-
-int angleToADCHigh(int angle);
-
-float angleLow();
-
-float angleHigh();
-
-void updatePIDLink(char link,int setPoint);
+void initMain();
 
 void sortMove(int in);
 
@@ -86,26 +59,10 @@ ISR(TIMER0_OVF_vect)
 
 
 
-int main(void)
+int main()
 {
-	//while(1){
-//	switch(inits(__OTHER)){
-//
-//
-//	case __USART:
-//		while(1){
-//			belt(5);
-//		}
-//	break;
-//
-//
-//	case __POT:
-//		while(1){
-//			printf("high = %d | low = %d\n\r", getADC(3), getADC(2));
-//		}
-//	break;
-//
-//	case __OTHER:
+	initMain();
+	while(1){
 		switch(s){
 		case 0: //WAIT FOR START
 			b = buttonToInt(readButtons());
@@ -159,9 +116,7 @@ int main(void)
 			}
 			break;
 		}
-//	break;
-//	}
-	//}
+	}
 printf("End Main\n\r");
 return 0;
 }
@@ -169,120 +124,18 @@ return 0;
 
 /**************************************************************************************************************************************************************************/
 
-int inits(int in){
-	state = in;
-	switch(state){
-	case __POT:
-		initRBELib();
-		debugUSARTInit(115200);
-		initSPI();
-		initADC(2);
-		initADC(3);
-		stopMotors();
-		setConst('H',20.0,0.01,0.1);
-		setConst('L',20.0,0.01,0.1);
-		//initTimer(0,0,0);
-		return in;
-		break;
-
-	default:
+void initMain(){
 		initRBELib();
 		debugUSARTInit(115200);
 		initSPI();
 		initADC(2);
 		initADC(3);
 		initButtons();
-		initCurrentSense(0);
 		stopMotors();
-		setConst('H',22.0,0.01,0.1);
-		setConst('L',22.0,0.01,0.1);
+		setConst('H',20.0,0.01,0.1);
+		setConst('L',20.0,0.01,0.1);
 		//initTimer(0,0,0);
-		return in;
-		break;
-	}
 }
-
-void updatePIDLink(char link,int setPoint)
-{
-switch(link){
-case 'H':
-	//1000 to 250
-	if (FALSE){
-		setDAC(2, 0);
-		setDAC(3, 0);
-	}
-	else{
-		volatile long pidNum = calcPID('H', setPoint, getADC(3));
-		printf("H ");
-		printf(" HighADC: %d,Set: %d",getADC(3),setPoint);
-		printf(" PID: %ld, |",pidNum);
-		if (pidNum >= 0){
-			setDAC(2, 0);
-			setDAC(3, pidNum);
-		}
-		else{
-			setDAC(2, -pidNum);
-			setDAC(3, 0);
-		}
-	}
-	break;
-case 'L':
-	//1000 to 250
-	if (FALSE){
-		setDAC(0, 0);
-		setDAC(1, 0);
-	}
-	else{
-		volatile long pidNum = calcPID('L', setPoint, getADC(2));
-		printf("L ");
-		printf(" LowADC: %d,Set: %d",getADC(2),setPoint);
-		printf(" PID: %ld, \n\r",pidNum);
-		if (pidNum >= 0)		{
-			setDAC(0, pidNum);
-			setDAC(1, 0);
-		}
-		else{
-			setDAC(0, 0);
-			setDAC(1, -pidNum);
-		}
-	}
-	break;
-	}
-}
-
-
-int angleToADCLow(int angle)
-{
-	//double offsetadclow = angle + offSetlow ;
-	double adclow =  ( angle / adctoanglelow) + offSetlow;
-
-	return adclow;
-}
-
-
-// Takes in angle and returns adc value for higher link 0-180
-int angleToADCHigh(int angle)
-{
-	//double offsetadclow = angle + offSetlow ;
-	double adchigh =  ( angle / adctoanglehigh) + offSethigh;
-
-	return adchigh;
-}
-
-float angleLow(){
-	int adc = getADC(2);
-	adc = adc - offSetlow;
-	float angle = adc * adctoanglelow;
-	return angle;
-}
-
-float angleHigh(){
-	int adc = getADC(3);
-	adc = adc - offSethigh;
-	float angle = adc * adctoanglehigh;
-	return angle;
-}
-
 
 void sorting(){
 	while(buttonToInt(readButtons())  == 0){}//WAITS for button press

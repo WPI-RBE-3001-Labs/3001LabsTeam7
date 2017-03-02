@@ -30,16 +30,16 @@ void stopMotors(){
  *
  * @todo Make a way to drive the links to a desired angle.
  */
-void gotoAngles(int lowerTheta, int upperTheta){
-
-	while(potAngle(channelUpper) <= upperTheta){
-		driveLink(1, 0);
-	}
-	while(potAngle(channelLower) <= lowerTheta){
-		driveLink(0, 1);
-	}
-	stopMotors();
-}
+//void gotoAngles(int lowerTheta, int upperTheta){
+//
+//	while(potAngle(channelUpper) <= upperTheta){
+//		driveLink(1, 0);
+//	}
+//	while(potAngle(channelLower) <= lowerTheta){
+//		driveLink(0, 1);
+//	}
+//	stopMotors();
+//}
 
 /**
  * @brief Drive the end effector of the arm to a desired X and Y position in the workspace.

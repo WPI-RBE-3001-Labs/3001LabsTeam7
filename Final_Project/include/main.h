@@ -13,5 +13,7 @@
 #include <stdlib.h>
 #include "buttons.h"
 #include "servo.h"
+#include "PID.h"
+
 
 #endif /* INCLUDE_MAIN_H_ */

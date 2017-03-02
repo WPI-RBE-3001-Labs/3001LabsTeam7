@@ -50,7 +50,7 @@ C_DEPS += \
 SRC/%.o: ../SRC/%.c
 	@echo 'Building file: $<'
 	@echo 'Invoking: AVR Compiler'
-	avr-gcc -I"C:\Users\coshea\Desktop\3001_Workspace\RBELib\include\RBELib" -I"C:\Users\coshea\Desktop\3001_Workspace\3001LabsTeam7\Lab2\include" -Wall -Os -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -std=gnu99 -funsigned-char -funsigned-bitfields -mmcu=atmega644p -DF_CPU=1843200UL -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@)" -c -o "$@" "$<"
+	avr-gcc -I"R:\RBE3001_Workspace\RBELib\include\RBELib" -I"R:\RBE3001_Workspace\3001LabsTeam7\Lab2\include" -Wall -Os -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -std=gnu99 -funsigned-char -funsigned-bitfields -mmcu=atmega644p -DF_CPU=1843200UL -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -c -o "$@" "$<"
 	@echo 'Finished building: $<'
 	@echo ' '
 

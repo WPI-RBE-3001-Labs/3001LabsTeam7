@@ -100,9 +100,9 @@ case 'H':
 	}
 	else{
 		volatile long pidNum = calcPID('H', setPoint, getADC(3));
-		printf("H ");
-		printf(" HighADC: %d,Set: %d",getADC(3),setPoint);
-		printf(" PID: %ld, |",pidNum);
+//		printf("H ");
+//		printf(" HighADC: %d,Set: %d",getADC(3),setPoint);
+//		printf(" PID: %ld, |",pidNum);
 		if (pidNum >= 0){
 			setDAC(2, 0);
 			setDAC(3, pidNum);
@@ -121,9 +121,9 @@ case 'L':
 	}
 	else{
 		volatile long pidNum = calcPID('L', setPoint, getADC(2));
-		printf("L ");
-		printf(" LowADC: %d,Set: %d",getADC(2),setPoint);
-		printf(" PID: %ld, \n\r",pidNum);
+//		printf("L ");
+//		printf(" LowADC: %d,Set: %d",getADC(2),setPoint);
+//		printf(" PID: %ld, \n\r",pidNum);
 		if (pidNum >= 0)		{
 			setDAC(0, pidNum);
 			setDAC(1, 0);

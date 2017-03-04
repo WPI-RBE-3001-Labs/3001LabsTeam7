@@ -19,29 +19,28 @@ char oldBits, newBits = 0x00;
 #define BIT6 0x01000000b
 #define BIT7 0x10000000b
 
-int v;
+static int v; // switch variable for setMotorVoltages
 
 
-//initializes buttons to port C inputs
+//initializes buttons to port C inputs 0, 2, 3 and 6 (the spare pins on c)
 void initButtons(){
-	DDRCbits._P0 = INPUT;
-	DDRCbits._P2 = INPUT;
-	DDRCbits._P3 = INPUT;
-	DDRCbits._P6 = INPUT;
+	DDRCbits._P0 = INPUT; // B1 = C_0_M
+	DDRCbits._P2 = INPUT; // B2 = C_2_M
+	DDRCbits._P3 = INPUT; // B3 = C_3_M
+	DDRCbits._P6 = INPUT; // B4 = C_6_M
 }
 
-///* initially returns 0x00 but returns button values
-// * as a the lower 4 bits of a char if there is a change
-// * in the state of the buttons */
-//char readButtons(){
-//	newBits = (~(PINCbits._P6<<3) | ~(PINCbits._P3<<2) | ~(PINCbits._P2<<1) | ~(PINCbits._P0));
-//	if(newBits != oldBits){
-//	oldBits = newBits;
-//	return newBits;
-//	}
-//	return oldBits;  //returns 0x00 if no button pressed
-//}  //not sure if this is working yet
-
+/*
+ * Used to test motors and drive at
+ * different voltages according to
+ * the button pressed
+ *
+ * B1 = all motors STOP
+ * B2 = 3 volts forward on the lower link
+ * B3 = 3 volts backwards on the lower link
+ * B4 = 6 volts forwards on the lower link
+ *
+ */
 void setMotorVoltage(){
 //printf("button pressed");
 v = buttonToInt(readButtons());
@@ -73,19 +72,29 @@ v = buttonToInt(readButtons());
 	}
 }
 
+
+/*
+ * reads the state of all buttons and returns a char representing
+ * the various states of the buttons which are default HIGH or 1
+ */
 unsigned char readButtons(){
 // Return the state of the buttons as {B4,B3,B2,B1}
 // in the lower nibble of the return value
 
-	char b1 = (PINCbits._P0 & BIT0);
-	char b2 = (PINCbits._P2 & BIT2);
-	char b3 = (PINCbits._P3 & BIT3);
-	char b4 = (PINCbits._P6 & BIT6);
+	char B1 = (PINCbits._P0 & BIT0);
+	char B2 = (PINCbits._P2 & BIT2);
+	char B3 = (PINCbits._P3 & BIT3);
+	char B4 = (PINCbits._P6 & BIT6);
 
-	char ret = (b4 << 3) | (b3 << 2) | (b2 << 1) | (b1);
+	char ret = (B4 << 3) | (B3 << 2) | (B2 << 1) | (B1);
 	return ret;
 }
 
+/*
+ * returns an integer based on what button was pressed
+ * ex: B4 -> 4
+ *
+ */
 int buttonToInt(unsigned char button) {
 	if (button == 14) {
   		return 1;

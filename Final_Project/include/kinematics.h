@@ -11,8 +11,8 @@
 //converts from degrees to radians
 double degtoRad(double angle);
 
-//double calcPos(int JA1, int JA2);
-
+//double * calcPos(int JA1, int JA2);
+//dobule * inverse(int x, int y);
 
 //returns mem loc of xy position of the end effector
 //double * calcPos(double JA1, double JA2);

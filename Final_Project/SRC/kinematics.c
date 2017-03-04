@@ -12,6 +12,9 @@
 #define L1 152.4
 #define L2 124
 
+/*
+ * returns the degree
+ */
 double degtoRad(double theta){
 	return theta*(M_PI/180);
 }

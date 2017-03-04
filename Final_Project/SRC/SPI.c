@@ -46,7 +46,7 @@ void initSPI(){
   ENCODER_SS_1 = 1;
 }
 
-
+//sends a byte to the spi and returns what is sent back from the interface
 unsigned char spiTransceive(BYTE data) {
 	/* Start transmission */
 	SPDR = data;

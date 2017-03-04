@@ -23,7 +23,6 @@ volatile double adctoanglehigh = .225;
  * @param Ki Integral value.
  * @param Kd Derivative value.
  *
- * @todo Create a function to the the PID constants for a given link.
  */
 long pidLastError_L = 0;
 long pidPrevLastError_L = 0;
@@ -64,7 +63,6 @@ void setConst(char link, float Kp, float Ki, float Kd)
  * @param setPoint The desired position of the link.
  * @param actPos The current position of the link.
  *
- * @todo Make a function to calculate the PID value for a link.
  */
 signed int calcPID(char link, int setPoint, int actPos)
 {
@@ -137,7 +135,7 @@ case 'L':
 	}
 }
 
-
+//takes an angle and returns correspoinding adc value
 int angleToADCLow(int angle)
 {
 	//double offsetadclow = angle + offSetlow ;
@@ -156,13 +154,14 @@ int angleToADCHigh(int angle)
 	return adchigh;
 }
 
+//returns the lower link angle according to pot
 float angleLow(){
 	int adc = getADC(2);
 	adc = adc - offSetlow;
 	float angle = adc * adctoanglelow;
 	return angle;
 }
-
+//returns the link angle according to pot
 float angleHigh(){
 	int adc = getADC(3);
 	adc = adc - offSethigh;

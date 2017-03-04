@@ -75,7 +75,7 @@ signed long package4 = 0;
 int gVal = 0;
 float range;
 float m = 0.97;
-float k = 4.0;  //GET CONSTANTS
+float k = 4.0;
 float b = 1;
 float mdot = 1.0/0.97;
 float bdot = 1/1;
@@ -83,13 +83,14 @@ int d = 0;
 int numLoops = 1;
 float v = 0;
 
+void chooseEnc(int chan);
+void encSSHigh();
 
 /**
  * @brief Find the acceleration in the given axis (X, Y, Z).
  * @param  axis The axis that you want to get the measurement of.
  * @return gVal Value of  acceleration.
  *
- * @todo Create a function that is able to find the acceleration of a given axis.
  */
 signed int getAccel(int axis){
 
@@ -110,7 +111,6 @@ signed int getAccel(int axis){
  * @param  chan The port that the IR sensor is on.
  * @return value The distance the block is from the sensor.
  *
- * @todo Make a function that is able to get the ADC value of the IR sensor.
  */
 float IRDist(int chan){
 	d = getADC(chan);
@@ -156,7 +156,6 @@ float IRDist(int chan){
  * @brief Initialize the encoders with the desired settings.
  * @param chan Channel to initialize.
  *
- * @todo Make a function that can setup both encoder chips on the board.
  */
 void encInit(int chan){
 
@@ -179,7 +178,6 @@ void encInit(int chan){
  * @brief Reset the current count of the encoder ticks.
  * @param chan The channel to clear.
  *
- * @todo Clear the encoder count (set to 0).
  */
 void resetEncCount(int chan){
 	encSSHigh();
@@ -193,7 +191,6 @@ void resetEncCount(int chan){
  * @param  chan Channel that the encoder is on that you would like to read.
  * @return count The current count of the encoder.
  *
- * @todo Find the current encoder ticks on a given channel.
  */
 signed long encCount(int chan){
 	encSSHigh();
@@ -209,6 +206,7 @@ signed long encCount(int chan){
 	if(chan) count = -count; // accounts for difference in upper and lower encoders
 	return count;
 }
+
 /*
  * slave select based on channel input
  * chan = 0 - lower link
@@ -223,13 +221,15 @@ void chooseEnc(int chan){  //slave selects based on channel input
 /*
  * deasserts both encoder slave selects
  */
-void encSSHigh(){
+void encSSHigh(void){
 	ENCODER_SS_0 = HIGH;
 	ENCODER_SS_1 = HIGH;
 }
 
+/*
+ * converts encoder ticks to degrees of motor shaft rotation
+ */
 float encToDeg(int chan){
-
 	float ticks = encCount(chan);
 	if(!chan) return ticks/(48.0*172.0/(360.0*2.0));
 	else return ticks/10.0;

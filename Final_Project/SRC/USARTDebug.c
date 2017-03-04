@@ -7,7 +7,6 @@
 
 
 #include "RBELib.h"
-//#include <avr/io.h>
 
 void debugUSARTInit(unsigned long baudrate){
   //Calculation given in table 16-1 on page 174
